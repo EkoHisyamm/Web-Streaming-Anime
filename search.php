@@ -1,5 +1,9 @@
 <?php
-require "admin/crud/config.php"
+require "admin/crud/config.php";
+
+// if(isset($_POST['submit'])){
+//     header("Location: search.php");
+// }
 ?>
 
 <!DOCTYPE html>
@@ -77,11 +81,11 @@ require "admin/crud/config.php"
                 </div>
                 <div class="col-lg-2">
                     <div class="header__right">
-                        <form class="form-inline ml-3">
+                        <form class="form-inline ml-3" method="GET" action="/movieku/search.php">
                             <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                <input class="form-control form-control-navbar" name="judul" value="<?php echo $_GET['judul'] ?>" type="search" placeholder="Search" aria-label="Search">
                                 <div class="input-group-append">
-                                    <button class="btn btn-navbar" style="background-color: white;" type="submit">
+                                    <butt class="btn btn-navbar" style="background-color: white;" name="submit" type="submit">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
@@ -107,8 +111,8 @@ require "admin/crud/config.php"
                 <div class="col-lg-8">
                     <div class="trending__product">
                         <div class="row">
-                            <?php $result = mysqli_query($con, "SELECT * FROM movies");
-                            if (mysqli_num_rows($result)) {
+                            <?php $result = mysqli_query($con, "SELECT * FROM movies WHERE judul LIKE '%".$_GET['judul']."%'");
+                            if (mysqli_num_rows($result) != 0) {
                                 while ($row = mysqli_fetch_array($result)) {
                             ?>
                                     <div class="col-lg-4 col-md-6 col-sm-6">
@@ -121,7 +125,7 @@ require "admin/crud/config.php"
                                                     $genrelist = $row['genre'];
                                                     $genre = explode(",", $genrelist);
                                                     for ($i = 0; $i < count($genre); $i++) {
-                                                        if ($i >= 5)
+                                                        if ($i >= 4)
                                                             break;
                                                     ?>
                                                         <li><?php echo $genre[$i] ?></li>

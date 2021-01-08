@@ -95,29 +95,17 @@ include "tamplate/header.php"
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <?php
-        include "tamplate/navbar.php"
-        ?>
-        <?php
         include "tamplate/sidebar.php"
         ?>
 
         <div class="content-wrapper">
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>Edit Movie</h1>
-                        </div>
-                    </div>
-                </div><!-- /.container-fluid -->
-            </section>
             <!-- Main content -->
             <section class="content">
-                <div class="container-fluid">
+                <div class="container-fluid" style="margin-top: 10px;">
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Tambah Movie</h3>
+                            <h3 class="card-title">Edit Movie</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
@@ -127,13 +115,19 @@ include "tamplate/header.php"
                                     <label for="Judul">Judul</label>
                                     <input name="judul" type="text" class="form-control" value="<?php echo $judul; ?>" placeholder="judul">
                                 </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="Durasi">Durasi</label>
                                     <input name="durasi" type="text" class="form-control" value="<?php echo $durasi; ?>" placeholder="durasi">
                                 </div>
                                 <div class="form-group">
-                                    <label for="Type">Type</label>
-                                    <input name="type" type="text" class="form-control" value="<?php echo $type; ?>" placeholder="type">
+                                    <label >Type</label>
+                                    <select name="type" class="custom-select rounded-0">
+                                        <option>BD</option>
+                                        <option <?php check($type,"TV"); ?>>TV</option>
+                                        <option <?php check($type,"Movie"); ?>>Movie</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="Episode">Episode</label>
@@ -141,8 +135,13 @@ include "tamplate/header.php"
                                 </div>
                                 <div class="form-group">
                                     <label for="Status">Status</label>
-                                    <input name="status" type="text" class="form-control" value="<?php echo $status; ?>" placeholder="status">
+                                    <select name="status" class="custom-select rounded-0">
+                                        <option >Ongoing</option>
+                                        <option <?php check($status,"Complated"); ?>>Complated</option>
+                                    </select>
                                 </div>
+                                </div>
+                                <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="Studio">Studio</label>
                                     <input name="studio" type="text" class="form-control" value="<?php echo $studio; ?>" placeholder="studio">
@@ -159,23 +158,28 @@ include "tamplate/header.php"
                                     <label for="Genre">Genre</label>
                                     <input name="genre" type="text" class="form-control" value="<?php echo $genre; ?>" placeholder="genre">
                                 </div>
+                                </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="Sinopsis">Sinopsis</label>
-                                    <textarea name="sinopsis" type="text" class="form-control" placeholder="Sinopsis"><?php echo $sinopsis; ?></textarea>
+                                    <textarea name="sinopsis" type="text" style="height: 250px;" class="form-control" placeholder="Sinopsis"><?php echo $sinopsis; ?></textarea>
                                 </div>
 
                                 <input type="hidden" name="id" value="<?php echo $id; ?>" />
-
 
                                 <div class="form-group">
                                     <label for="Cover">
                                         <Cap>Cover</Cap>
                                     </label>
-                                    <input type="file" name="file" />
+                                    <div class="custom-file">
+                                        <input name="file" type="file" class="custom-file-input costumfile">
+                                        <label class="custom-file-label filename" for="cover"><?php echo $gambar ?></label>
+                                    </div>
+                                    <!-- <img style="width: -moz-available; margin-top: 10px;" src="upload/" /> -->
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button name="submit" type="submit" class="btn btn-primary">Upload</button>
+                                <button name="submit" type="submit" class="btn btn-primary float-right">Upload</button>
                             </div>
                     </div>
                     <!-- /.card-body -->
@@ -190,3 +194,13 @@ include "tamplate/header.php"
         ?>
         <!-- /.content-wrapper -->
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('.costumfile').on('change',function(event) {
+            console.log(event.target.files[0].name);
+            var test = event.target.files[0].name;
+            $('.filename').text(test);
+        })
+    })
+</script>

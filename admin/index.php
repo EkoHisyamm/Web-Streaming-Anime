@@ -3,7 +3,7 @@
   session_start();
 
   if(isset($_SESSION["LOGIN"]) && $_SESSION["LOGIN"] === true){
-    header("Location: dashboard.php");
+    header("Location: listmovie.php");
     exit;
   }
 
@@ -39,26 +39,16 @@
       <p class="login-box-msg">Sign in to start your session</p>
 
       <form method="post" action="">
-        <div class="input-group mb-3">
-          <input name="username" type="email" class="form-control" placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
+        <div class="from-group mb-3">
+          <input name="username" type="text" class="form-control" placeholder="username" value="">
+          <span style="font-size: 0.8rem;" class="help-block"><?php echo $_GET['username'] ?></span>
         </div>
-        <div class="input-group mb-3">
-          <input name="password" type="password" class="form-control" placeholder="Password">
+        <div class="from-group mb-3">
+          <input name="password" type="password" class="form-control" placeholder="Password" value="">
           <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
+          <span style="font-size: 0.8rem;" class="help-block"><?php echo $_GET['password'] ?></span>
           </div>
-        </div>
-
-      <?php if(isset($_GET['pesan'])) {  ?>
-	      <label style="color:red;"><?php echo $_GET['pesan']; ?></label>
-	    <?php } ?>	          
+        </div>	          
 
         <div class="row">
           <div class="col-8">

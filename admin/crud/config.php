@@ -11,26 +11,33 @@ if (!$con) {
 function login()
 {
     global $con;
-
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "select * from users where name = '$username' and password = '$password'";
+    $sql = "select * from users where name = '$username'";
 
     $json["hasil"] = array();
     $result = mysqli_query($con, $sql);
     $count = mysqli_num_rows($result);
+    $row = mysqli_fetch_array($result);
 
 
-    if (empty($username) || empty($password)) {
-        header("Location: index.php?pesan=mohon isi ");
+    if (empty($username)) {
+        header("Location: index.php?username=username tidak boleh kosong ");
+    }else if(empty($password)){
+        header("Location: index.php?password=password tidak boleh kosong");
     }
-    if ($count > 0) {
-        $_SESSION["LOGIN"] = true;
-        $_SESSION["USERNAME"] = true;
-        header("Location: dashboard.php");
+    else if ($count > 0) {
+        if($password == $row['password']){
+            $_SESSION["LOGIN"] = true;
+            $_SESSION["USERNAME"] = $username;
+            $_SESSION["PASSWORD"] = $username;
+            header("Location: listmovie.php");
+        }else{
+            header("Location: index.php?password=password salah");
+        }
     } else {
-        header("Location: index.php?pesan=gagal login");
+        header("Location: index.php?username=username salah");
     }
 }
 
@@ -66,7 +73,7 @@ function deletemovie($id)
 
     $id = $_POST['id'];
 
-    $sql = mysqli_query($con, "DELETE FROM movies WHERE id = '$id'");
+    $sql = mysqli_query($con, "DELETE FROM `movies` WHERE id = '$id'");
 
     if ($sql) {
         header(header("Location: listmovie.php"));
@@ -114,8 +121,14 @@ function deleteimg($nameimg){
     if($cek == false){
     if(!unlink($path)){
         echo "<script>alert('gambar tidak ditemukan')</script>";
-    }else{
-        echo "<script>alert('gambar berhasil di hapus')</script>";
     }
 }
 }
+
+function check($a,$b){
+    if($a == $b){
+        echo 'selected';
+    }
+}
+
+?>
