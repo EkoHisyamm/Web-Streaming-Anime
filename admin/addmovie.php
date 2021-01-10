@@ -7,16 +7,14 @@ if (isset($_POST['submit'])) {
 }
 
 $id = $_POST['id'];
-?>
 
-<?php
-include "tamplate/header.php"
+include 'tamplate/header.php'
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <?php
-        include "tamplate/sidebar.php"
+        include 'tamplate/sidebar.php'
         ?>
 
         <div class="content-wrapper">
@@ -108,8 +106,10 @@ include "tamplate/header.php"
             <!-- /.content -->
         </div>
         <?php
-        include "tamplate/footer.php"
+        include 'tamplate/footer.php'
         ?>
+
+    </div>
         <!-- /.content-wrapper -->
 </body>
 

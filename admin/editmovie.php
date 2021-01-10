@@ -4,23 +4,23 @@ require "crud/config.php";
 $judul = $status = $studio = $rilis = $rate = $genre = $sinopsis = $type = $episode = $durasi;
 $gambar;
 
-if (isset($_POST["id"]) && !empty($_POST["id"])) {
-    $id = $_POST["id"];
+if (isset($_POST['id']) && !empty($_POST['id'])) {
+    $id = $_POST['id'];
 
-    $result = mysqli_query($con, "SELECT * FROM movies WHERE id = '$id'");
+    $result = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '".$id."'");
     $row = mysqli_fetch_array($result);
     deleteimg($row['gambar']); 
 
-    $judul = $_POST["judul"];
-    $status = $_POST["status"];
-    $studio = $_POST["studio"];
-    $rilis = $_POST["rilis"];
-    $rate = $_POST["rate"];
-    $genre = $_POST["genre"];
-    $sinopsis = $_POST["sinopsis"];
-    $type = $_POST["type"];
-    $episode = $_POST["episode"];
-    $durasi = $_POST["durasi"];
+    $judul = $_POST['judul'];
+    $status = $_POST['status'];
+    $studio = $_POST['studio'];
+    $rilis = $_POST['rilis'];
+    $rate = $_POST['rate'];
+    $genre = $_POST['genre'];
+    $sinopsis = $_POST['sinopsis'];
+    $type = $_POST['type'];
+    $episode = $_POST['episode'];
+    $durasi = $_POST['durasi'];
     if($_FILES['file']['size']==0 && $_FILES['file']['error']==4){
         $gambar = $row['gambar'];
     }else{
@@ -52,8 +52,8 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
         }
     }
 } else {
-    if (isset($_GET["id"]) && !empty($_GET["id"])) {
-        $id = trim($_GET["id"]);
+    if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $id = trim($_GET['id']);
 
         $sql = "SELECT * FROM movies WHERE id = ?";
         if ($stmt = mysqli_prepare($con, $sql)) {
@@ -68,16 +68,16 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
                 if (mysqli_num_rows($result) == 1) {
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-                    $judul = $row["judul"];
-                    $status = $row["status"];
-                    $studio = $row["studio"];
-                    $rilis = $row["rilis"];
-                    $rate = $row["rate"];
-                    $genre = $row["genre"];
-                    $sinopsis = $row["sinopsis"];
-                    $type = $row["type"];
-                    $episode = $row["episode"];
-                    $durasi = $row["durasi"];
+                    $judul = $row['judul'];
+                    $status = $row['status'];
+                    $studio = $row['studio'];
+                    $rilis = $row['rilis'];
+                    $rate = $row['rate'];
+                    $genre = $row['genre'];
+                    $sinopsis = $row['sinopsis'];
+                    $type = $row['type'];
+                    $episode = $row['episode'];
+                    $durasi = $row['durasi'];
                     $gambar = $row['gambar'];
                 }
             }
@@ -85,17 +85,17 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
     }
 }
 
-$sql = "SELECT * FROM movies where id ='$id'";
+$sql = "SELECT * FROM `movies` where `id` ='".$id."'";
 ?>
 
 <?php
-include "tamplate/header.php"
+include 'tamplate/header.php'
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <?php
-        include "tamplate/sidebar.php"
+        include 'tamplate/sidebar.php'
         ?>
 
         <div class="content-wrapper">
@@ -190,8 +190,9 @@ include "tamplate/header.php"
             <!-- /.content -->
         </div>
         <?php
-        include "tamplate/footer.php"
+        include 'tamplate/footer.php'
         ?>
+    </div> 
         <!-- /.content-wrapper -->
 </body>
 

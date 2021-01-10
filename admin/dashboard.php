@@ -20,9 +20,6 @@ include "tamplate/header.php"
         <!-- Content Wrapper. Contains page content -->
         <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-    </div>
     <?php
     include "tamplate/footer.php"
     ?>

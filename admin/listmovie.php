@@ -1,5 +1,5 @@
 <?php
-require "crud/config.php";
+require 'crud/config.php';
 session_start();
 
 if (!isset($_SESSION["LOGIN"]) || $_SESSION["LOGIN"] !== true) {
@@ -13,21 +13,18 @@ if (isset($_POST['delete'])) {
 }
 
 if (isset($_GET['search'])){
-    $sql = "SELECT * FROM movies where judul LIKE '%".$_GET['search']."%'";
+    $sql = "SELECT * FROM `movies` where judul LIKE '%".$_GET['search']."%'";
 }else{
-    $sql = "SELECT * FROM movies";
+    $sql = "SELECT * FROM `movies`";
 }
-?>
-
-<?php
-include "tamplate/header.php"
+include 'tamplate/header.php'
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <?php
-        include "tamplate/navbar.php";
-        include "tamplate/sidebar.php";
+        include 'tamplate/navbar.php';
+        include 'tamplate/sidebar.php';
         ?>
 
 
@@ -106,9 +103,9 @@ include "tamplate/header.php"
         </div>
 
         <?php
-        include "tamplate/footer.php"
+        include 'tamplate/footer.php'
         ?>
-
+    </div>
         <!-- /.content-wrapper -->
 </body>
 

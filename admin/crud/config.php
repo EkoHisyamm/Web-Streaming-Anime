@@ -14,7 +14,7 @@ function login()
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "select * from users where name = '$username'";
+    $sql = "SELECT * FROM `users` WHERE `name` = $username";
 
     $json["hasil"] = array();
     $result = mysqli_query($con, $sql);
@@ -57,8 +57,8 @@ function addmovie()
     $status = $_POST['status'];
     $gambar = upload();
 
-    $sql = "INSERT INTO movies ( gambar,judul, sinopsis, status, studio, rilis, rate, genre, durasi, type, episode) 
-    VALUES ('$gambar','$judul','$sinopsis','$status','$studio','$rilis','$rate','$genre','$durasi', '$type', '$episode')";
+    $sql = "INSERT INTO `movies` ( `gambar`,`judul`, `sinopsis`, `status`, `studio`, `rilis`, `rate`, `genre`, `durasi`, `type`, `episode`) 
+    VALUES ('".$gambar."','".$judul."','".$sinopsis."','".$status."','".$studio."','".$rilis."','".$rate."','".$genre."','".$durasi."', '".$type."', '".$episode."')";
 
     if (mysqli_query($con, $sql)) {
         header("Location: listmovie.php");
@@ -73,7 +73,7 @@ function deletemovie($id)
 
     $id = $_POST['id'];
 
-    $sql = mysqli_query($con, "DELETE FROM `movies` WHERE id = '$id'");
+    $sql = mysqli_query($con, "DELETE FROM `movies` WHERE `id` = '".$id."'");
 
     if ($sql) {
         header(header("Location: listmovie.php"));
