@@ -13,8 +13,6 @@ include "tamplate/header.php"
     <div class="wrapper">
         <?php
         include "tamplate/navbar.php"
-        ?>
-        <?php
         include "tamplate/sidebar.php"
         ?>
         <!-- Content Wrapper. Contains page content -->
