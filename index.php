@@ -76,7 +76,6 @@ include 'tamplate/header.php';
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
                             <div class="row">
                         <?php $result = mysqli_query($con, "SELECT * FROM `movies`");
                             if (mysqli_num_rows($result)) {
@@ -109,7 +108,6 @@ include 'tamplate/header.php';
                                 }
                             }
                             ?>
-                        </div>
                         </div>
                     </div>
                     <div class="recent__product">

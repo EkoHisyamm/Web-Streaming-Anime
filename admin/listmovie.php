@@ -33,7 +33,7 @@ include 'tamplate/header.php'
                 <?php
                 $result = mysqli_query($con, $sql);
                 ?>
-                    <table class="table" style="text-align: center;">
+                    <table class="table" style="text-align: center; background-color: white;">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Judul</th>
