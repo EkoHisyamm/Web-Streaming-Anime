@@ -1,0 +1,16 @@
+.note-editor .note-editing-area .note-editable {
+    min-height: 400px;
+}
+
+label{
+    margin-bottom: 0.3rem;
+}
+
+label:not(.form-check-label):not(.custom-file-label) {
+    font-size: 15px;
+}
+
+.card-header{
+    font-size: 19px;
+    font-weight: bold;
+}

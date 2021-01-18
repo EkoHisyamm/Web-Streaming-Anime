@@ -1,0 +1,39 @@
+.product__item__text h5 a{
+    overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+h5 {
+    font-size: 20px;
+}
+
+li a:hover {
+    color: rgb(255, 255, 255);
+    background-color: transparent;
+  }
+
+  li a:visited {
+    color: rgb(255, 255, 255);
+    background-color: transparent;
+  }
+
+ li a:active {
+    color: rgb(255, 255, 255);
+    background-color: transparent;
+  }
+
+  .product__item__pic .view {
+    background: #0c70de;
+    }
+
+    .product__sidebar__view__item .view{
+        background: #0c70de;
+    }
+
+    .tab__index {
+        overflow: hidden;
+        list-style: none;
+        padding: 0;        
+    }
