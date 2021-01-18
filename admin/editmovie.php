@@ -1,5 +1,5 @@
 <?php
-require "crud/config.php";
+require 'crud/config.php';
 
 $judul = $status = $studio = $rilis = $rate = $genre = $sinopsis = $type = $episode = $durasi;
 $gambar;
@@ -7,22 +7,22 @@ $gambar;
 if (isset($_POST['id']) && !empty($_POST['id'])) {
     $id = $_POST['id'];
 
-    $result = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '".$id."'");
+    $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `id` = "'.$id.'"');
     $row = mysqli_fetch_array($result);
     deleteimg($row['gambar']); 
 
-    $judul = $_POST['judul'];
-    $status = $_POST['status'];
-    $studio = $_POST['studio'];
-    $rilis = $_POST['rilis'];
-    $rate = $_POST['rate'];
-    $genre = $_POST['genre'];
-    $sinopsis = $_POST['sinopsis'];
-    $type = $_POST['type'];
-    $episode = $_POST['episode'];
-    $durasi = $_POST['durasi'];
+    $judul      = $_POST['judul'];
+    $status     = $_POST['status'];
+    $studio     = $_POST['studio'];
+    $rilis      = $_POST['rilis'];
+    $rate       = $_POST['rate'];
+    $genre      = $_POST['genre'];
+    $sinopsis   = $_POST['sinopsis'];
+    $type       = $_POST['type'];
+    $episode    = $_POST['episode'];
+    $durasi     = $_POST['durasi'];
     if($_FILES['file']['size']==0 && $_FILES['file']['error']==4){
-        $gambar = $row['gambar'];
+        $gambar = $_POST['filename'];
     }else{
         $gambar = upload();
     }
@@ -32,18 +32,18 @@ if (isset($_POST['id']) && !empty($_POST['id'])) {
     if ($stmt = mysqli_prepare($con, $sql)) {
         mysqli_stmt_bind_param($stmt, "sssssssssssi", $pram_name, $pram_status, $pram_studio, $pram_rilis, $pram_rate, $pram_genre, $pram_sinopsis, $pram_type, $pram_episode, $pram_durasi, $pram_gambar, $pram_id);
 
-        $pram_name = $judul;
-        $pram_status = $status;
-        $pram_studio = $studio;
-        $pram_rilis = $rilis;
-        $pram_rate = $rate;
-        $pram_genre = $genre;
-        $pram_sinopsis = $sinopsis;
-        $pram_type = $type;
-        $pram_episode = $episode;
-        $pram_durasi = $durasi;
-        $pram_gambar = $gambar;
-        $pram_id = $id;
+        $pram_name      = $judul;
+        $pram_status    = $status;
+        $pram_studio    = $studio;
+        $pram_rilis     = $rilis;
+        $pram_rate      = $rate;
+        $pram_genre     = $genre;
+        $pram_sinopsis  = $sinopsis;
+        $pram_type      = $type;
+        $pram_episode   = $episode;
+        $pram_durasi    = $durasi;
+        $pram_gambar    = $gambar;
+        $pram_id        = $id;
 
         if (mysqli_stmt_execute($stmt)) {
             // Records updated successfully. Redirect to landing page
@@ -68,36 +68,29 @@ if (isset($_POST['id']) && !empty($_POST['id'])) {
                 if (mysqli_num_rows($result) == 1) {
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-                    $judul = $row['judul'];
-                    $status = $row['status'];
-                    $studio = $row['studio'];
-                    $rilis = $row['rilis'];
-                    $rate = $row['rate'];
-                    $genre = $row['genre'];
-                    $sinopsis = $row['sinopsis'];
-                    $type = $row['type'];
-                    $episode = $row['episode'];
-                    $durasi = $row['durasi'];
-                    $gambar = $row['gambar'];
+                    $judul      = $row['judul'];
+                    $status     = $row['status'];
+                    $studio     = $row['studio'];
+                    $rilis      = $row['rilis'];
+                    $rate       = $row['rate'];
+                    $genre      = $row['genre'];
+                    $sinopsis   = $row['sinopsis'];
+                    $type       = $row['type'];
+                    $episode    = $row['episode'];
+                    $durasi     = $row['durasi'];
+                    $gambar     = $row['gambar'];
                 }
             }
         }
     }
 }
-
-$sql = "SELECT * FROM `movies` where `id` ='".$id."'";
-?>
-
-<?php
 include 'tamplate/header.php'
 ?>
-
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <?php
         include 'tamplate/sidebar.php'
         ?>
-
         <div class="content-wrapper">
             <!-- Main content -->
             <section class="content">
@@ -175,7 +168,6 @@ include 'tamplate/header.php'
                                         <input name="file" type="file" class="custom-file-input costumfile">
                                         <label class="custom-file-label filename" for="cover"><?php echo $gambar ?></label>
                                     </div>
-                                    <!-- <img style="width: -moz-available; margin-top: 10px;" src="upload/" /> -->
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -195,11 +187,9 @@ include 'tamplate/header.php'
     </div> 
         <!-- /.content-wrapper -->
 </body>
-
 <script>
     $(document).ready(function() {
         $('.costumfile').on('change',function(event) {
-            console.log(event.target.files[0].name);
             var test = event.target.files[0].name;
             $('.filename').text(test);
         })

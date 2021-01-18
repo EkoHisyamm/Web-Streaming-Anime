@@ -1,9 +1,9 @@
 <?php 
-  require "crud/config.php";
+  require 'crud/config.php';
   session_start();
 
-  if(isset($_SESSION["LOGIN"]) && $_SESSION["LOGIN"] === true){
-    header("Location: listmovie.php");
+  if(isset($_SESSION['LOGIN']) && $_SESSION['LOGIN'] === true){
+    header('Location: listmovie.php');
     exit;
   }
 
@@ -11,14 +11,12 @@
     login();
   }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Log in</title>
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -37,7 +35,6 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-
       <form method="post" action="">
         <div class="from-group mb-3">
           <input name="username" type="text" class="form-control" placeholder="username" value="">
@@ -49,7 +46,6 @@
           <span style="font-size: 0.8rem;" class="help-block"><?php echo $_GET['password'] ?></span>
           </div>
         </div>	          
-
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
@@ -66,8 +62,6 @@
           <!-- /.col -->
         </div>
       </form>
-
-
       <div class="social-auth-links text-center mb-3">
         <p>- OR -</p>
         <a href="#" class="btn btn-block btn-primary">
@@ -78,7 +72,6 @@
         </a>
       </div>
       <!-- /.social-auth-links -->
-
       <p class="mb-1">
         <a href="forgot-password.html">I forgot my password</a>
       </p>
@@ -90,7 +83,6 @@
   </div>
 </div>
 <!-- /.login-box -->
-
 <!-- jQuery -->
 <script src="html/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->

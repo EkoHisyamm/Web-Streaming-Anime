@@ -24,7 +24,7 @@
                                     <li><a href="./login.html">Login</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Genre</a></li>
+                            <li><a href="./genre.php">Genre</a></li>
                             <li><a href="#">Jadwal Rilis</a></li>
                         </ul>
                     </nav>
@@ -34,7 +34,7 @@
                 <div class="header__right">
                     <form class="form-inline ml-3" action="search.php" method="GET">
                         <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" name='judul' placeholder="Search" aria-label="Search">
+                            <input class="form-control form-control-navbar" value="<?php $_GET['judul'] ?>" type="search" name='judul' placeholder="Search" aria-label="Search">
                         </div>
                     </form>
                 </div>
