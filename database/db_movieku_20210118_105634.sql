@@ -21,7 +21,7 @@ CREATE TABLE `episode`(
 	`judul` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`episode` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`link` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
+	`id` Int( 11 ) UNSIGNED AUTO_INCREMENT NOT NULL,
 	CONSTRAINT `unique_id` UNIQUE( `id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
@@ -55,7 +55,7 @@ DROP TABLE IF EXISTS `movies` CASCADE;
 
 -- CREATE TABLE "movies" ---------------------------------------
 CREATE TABLE `movies`( 
-	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
+	`id` Int( 11 ) UNSIGNED AUTO_INCREMENT NOT NULL,
 	`judul` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`gambar` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`sinopsis` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS `users` CASCADE;
 
 -- CREATE TABLE "users" ----------------------------------------
 CREATE TABLE `users`( 
-	`id` Int( 11 ) AUTO_INCREMENT NULL,
+	`id` Int( 11 ) UNSIGNED AUTO_INCREMENT NULL,
 	`name` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`password` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	CONSTRAINT `unique_id` UNIQUE( `id` ) )
