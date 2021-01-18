@@ -55,10 +55,8 @@ function addmovie()
   $gambar     = upload();
   $sql = 'INSERT INTO `movies` (`gambar`,`judul`, `sinopsis`, `status`, `studio`, `rilis`, `rate`, `genre`, `durasi`, `type`, `episode`) 
                                  VALUES ("' . $gambar . '", "' . $judul . '", "' . $sinopsis . '", "' . $status . '", "' . $studio . '", "' . $rilis . '", "' . $rate . '", "' . $genre . '", "' . $durasi . '", "' . $type . '", ' . $episode . ')';
-  $cek = 'SELECT * FROM `movies` WHERE `judul` LIKE "%' . "'$judul'" . '%"';
+  $cek = 'SELECT * FROM `movies` WHERE `judul` LIKE "%' . $judul . '%"';
   $count = mysqli_fetch_array(mysqli_query($con, $cek));
-  print_r($count);
-  die();
   if (mysqli_query($con, $sql)) {
     header('Location: listmovie.php');
   } else {
