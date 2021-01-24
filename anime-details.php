@@ -51,28 +51,33 @@ $detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
                       </ul>
                     </div>
                   </div>
-                  <div>
-                    <?php
-                    $genrelist = $row['genre'];
-                    $genre = explode(",", $genrelist);
-                    for ($i = 0; $i < count($genre); $i++) {
-                    ?>
-                      <a style="color: white; margin-bottom: 5px;  scale: 90%;" class="btn btn-dark"><?php echo $genre[$i] ?></a>
-                    <?php
-                    } ?>
+                  <div class="anime__details__episodes">
+                    <div class="section-title">
+                      <h5>Genre</h5>
+                    </div>
+                    <div>
+                      <?php
+                      $genrelist = $row['genre'];
+                      $genre = explode(",", $genrelist);
+                      for ($i = 0; $i < count($genre); $i++) {
+                      ?>
+                        <a style="color: white;  margin-right: 5px; margin-bottom: 5px; padding: 5px 15px; font-size: 11px;" class="btn btn-dark"><?php echo $genre[$i] ?></a>
+                      <?php
+                      } ?>
+                    </div>
                   </div>
                 </div>
                 <div class="anime__details__episodes">
                   <div class="section-title">
                     <h5>Episode</h5>
                   </div>
-                  <div style="overflow:auto; height: 185px;">
+                  <div style="overflow:auto; height: auto; max-height: 185px;">
                     <?php
                     foreach ($detail as $arr) {
                       for ($a = 0; $a < (int)$arr['episode']; $a++) {
                         $b = $arr['id'] . '-' . ($a + 1);
                     ?>
-                        <a href="anime-watching.php?id=<?php echo $b; ?>"><?php echo $a + 1 ?></a>
+                        <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id=<?php echo $b; ?>"><?php echo $a + 1 ?></a>
                     <?php
                       }
                     }

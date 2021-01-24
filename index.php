@@ -4,6 +4,7 @@ require 'admin/crud/config.php';
 include 'tamplate/header.php';
 
 $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
+$genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
 ?>
 
 <body>
@@ -44,12 +45,12 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
                         <ul>
                           <?php
                           $genrelist = $row['genre'];
-                          $genre = explode(",", $genrelist);
-                          for ($i = 0; $i < count($genre); $i++) {
+                          $gen = explode(",", $genrelist);
+                          for ($i = 0; $i < count($gen); $i++) {
                             if ($i > 2)
                               break;
                           ?>
-                            <li><a href="#"><?php echo $genre[$i] ?></a></li>
+                            <li><a href="#"><?php echo $gen[$i] ?></a></li>
                           <?php } ?>
                         </ul>
                         <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
@@ -211,7 +212,7 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
               $a = 0;
               if (mysqli_num_rows($result)) {
                 foreach ($result as $row) {
-                  if ($a >= 5) {
+                  if ($a >= 3) {
                     break;
                   }
                   $a++;
@@ -226,6 +227,22 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
               <?php
                 }
               } ?>
+            </div>
+          </div>
+          <div class="product__sidebar">
+            <div class="product__sidebar__view">
+              <div class="section-title">
+                <h5>Genre</h5>
+              </div>
+              <div class="genre">
+                <?php
+                foreach ($genreku as $data) {
+                ?>
+                  <a class="btn" style="color: white; margin-bottom: 5px; text-align: left;"><?php echo $data['nama'] ?></a>
+                <?php
+                }
+                ?>
+              </div>
             </div>
           </div>
         </div>
@@ -250,7 +267,6 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
   <script src="js/player.js"></script>
   <script src="js/jquery.nice-select.min.js"></script>
   <script src="js/mixitup.min.js"></script>
-  <script src="js/jquery.slicknav.js"></script>
   <script src="js/owl.carousel.min.js"></script>
   <script src="js/main.js"></script>
 </body>

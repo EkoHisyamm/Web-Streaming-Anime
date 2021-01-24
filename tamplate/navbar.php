@@ -4,8 +4,8 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="header__logo">
-                    <a href="./index.php">
-                        <img src="img/logo.png" alt="">
+                    <a href="./index.php" style="display: block;">
+                        <img class="navbar__img" style=" display: block; margin-left: auto; margin-right: auto;" src="img/logo.png" alt="">
                     </a>
                 </div>
             </div>
@@ -13,7 +13,7 @@
                 <div class="header__nav">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.php">Home</a></li>
+                            <li class=""><a href="./index.php">Home</a></li>
                             <li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
                                 <ul class="dropdown">
                                     <li><a href="./categories.html">Categories</a></li>
@@ -30,7 +30,7 @@
                     </nav>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="navbar__search">
                 <div class="header__right">
                     <form class="form-inline ml-3" action="search.php" method="GET">
                         <div class="input-group input-group-sm">
@@ -40,6 +40,5 @@
                 </div>
             </div>
         </div>
-        <div id="mobile-menu-wrap"></div>
     </div>
 </header>

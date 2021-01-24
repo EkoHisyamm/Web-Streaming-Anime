@@ -40,7 +40,7 @@ include 'tamplate/header.php'
                     <div class="input-group">
                       <div class="custom-file">
                         <input name="file" type="file" class="custom-file-input costumfile">
-                        <label class="custom-file-label filename" for="cover"><?php echo $data['gambar'] ?></label>
+                        <input style="width: 100%;" class="custom-file-label filename" name="filename" for="cover" value="<?php echo $data['gambar'] ?>">
                       </div>
                       <div class="input-group-append">
                         <a name="submit" class="btn btn-secondary btn-preview">preview</a>
@@ -114,13 +114,12 @@ include 'tamplate/header.php'
     include 'tamplate/footer.php'
     ?>
   </div>
-  <!-- /.content-wrapper -->
 </body>
 <script>
   $(document).ready(function() {
     $('.costumfile').on('change', function(event) {
       var test = event.target.files[0].name;
-      $('.filename').text(test);
+      $('.filename').val(test);
       if ($('.btn-preview').text() == "hide") {
         $('.preview').attr("src", URL.createObjectURL($(this)[0].files[0]));
       }
@@ -134,10 +133,11 @@ include 'tamplate/header.php'
           $('.btn-preview').text("preview");
           $('.preview').removeAttr("src");
         }
-      } else if ($('.filename').text() != "") {
+      } else if ($('.filename').val() != "") {
         if ($('.btn-preview').text() == "preview") {
-          var a = 'upload/' + $('.filename').text();
+          var a = 'upload/' + $('.filename').val();
           $('.preview').attr("src", a);
+          var a = $('.preview');
           $('.btn-preview').text("hide");
         } else {
           $('.btn-preview').text("preview");

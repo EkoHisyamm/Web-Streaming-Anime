@@ -3,6 +3,7 @@ require 'admin/crud/config.php';
 include 'tamplate/header.php';
 
 $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
+$genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
 ?>
 
 <body>
@@ -14,7 +15,7 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
   <!-- Product Section Begin -->
   <section class="product spad">
     <div class="container ">
-      <div class="row row-cols-5">
+      <div class="row">
         <div class="col-lg-8">
           <div class="trending__product">
             <div class="row">
@@ -24,27 +25,18 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="btn__all">
-                  <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
-                </div>
               </div>
             </div>
-            <div class="row">
-              <?php
-              foreach ($result as $row) {
-                if (strtolower($row['status']) == 'ongoing') {
-              ?>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="product__item">
-                      <div class="product__item__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
-
-                      </div>
-                    </div>
-                  </div>
-              <?php
+            <div class="row" style="padding-left: 10px;">
+              <ul class="taxindex" style="list-style-type:none; min-width: 100%;">
+                <?php
+                foreach ($genre as $data) {
+                ?>
+                  <li class="btn btn-dark" style=" margin-bottom: 5px; text-align: left;"><a><?php echo $data['nama']; ?></a></li>
+                <?php
                 }
-              }
-              ?>
+                ?>
+              </ul>
             </div>
           </div>
         </div>
@@ -58,7 +50,7 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
               $a = 0;
               if (mysqli_num_rows($result)) {
                 foreach ($result as $row) {
-                  if ($a >= 5) {
+                  if ($a >= 3) {
                     break;
                   }
                   $a++;
@@ -73,6 +65,22 @@ $result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
               <?php
                 }
               } ?>
+            </div>
+          </div>
+          <div class="product__sidebar">
+            <div class="product__sidebar__view">
+              <div class="section-title">
+                <h5>Genre</h5>
+              </div>
+              <div class="genre">
+                <?php
+                foreach ($genre as $data) {
+                ?>
+                  <a class="btn" style="color: white; margin-bottom: 5px; text-align: left;"><?php echo $data['nama'] ?></a>
+                <?php
+                }
+                ?>
+              </div>
             </div>
           </div>
         </div>

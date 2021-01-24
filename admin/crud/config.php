@@ -11,15 +11,14 @@ if (!$con) {
 function login()
 {
   global $con;
-  $username = $_POST['username'];
-  $password = $_POST['password'];
+  $username = addslashes($_POST['username']);
+  $password = addslashes($_POST['password']);
 
-  $sql = 'SELECT * FROM `users` WHERE `name` = "' . $username . '"';
+  $sql = 'SELECT `name`, `password` FROM `users` WHERE `name` = "' . $username . '"';
 
   $result = mysqli_query($con, $sql);
   $count  = mysqli_num_rows($result);
   $row    = mysqli_fetch_array($result);
-
 
   if (empty($username)) {
     header('Location: index.php?username=username tidak boleh kosong');
@@ -55,8 +54,9 @@ function addmovie()
   $gambar     = upload();
   $sql = 'INSERT INTO `movies` (`gambar`,`judul`, `sinopsis`, `status`, `studio`, `rilis`, `rate`, `genre`, `durasi`, `type`, `episode`) 
                                  VALUES ("' . $gambar . '", "' . $judul . '", "' . $sinopsis . '", "' . $status . '", "' . $studio . '", "' . $rilis . '", "' . $rate . '", "' . $genre . '", "' . $durasi . '", "' . $type . '", ' . $episode . ')';
-  $cek = 'SELECT * FROM `movies` WHERE `judul` LIKE "%' . $judul . '%"';
-  $count = mysqli_fetch_array(mysqli_query($con, $cek));
+  $cek = 'SELECT `judul` FROM `movies` WHERE judul = "' . $judul . '"';
+  $count = mysqli_query($con, $cek);
+  $count = mysqli_num_rows($count);
   if (mysqli_query($con, $sql)) {
     header('Location: listmovie.php');
   } else {
@@ -83,8 +83,8 @@ function addepisode()
 function addgenre()
 {
   global $con;
-  $name = $_POST['name'];
-  $info = $_POST['info'];
+  $name = ucfirst($_POST['name']);
+  $info = ucfirst($_POST['info']);
   $sql  = 'INSERT INTO `genre` (`nama`,`info`) 
                                  VALUES ("' . $name . '", "' . $info . '")';
   if (mysqli_query($con, $sql)) {
@@ -98,6 +98,9 @@ function addgenre()
 function editmovie($id)
 {
   global $con;
+  $a = explode("-", $id);
+  $id = $a[0];
+  $current = $a[1];
   $judul    = $_POST['judul'];
   $type     = $_POST['type'];
   $episode  = $_POST['episode'];
@@ -108,14 +111,13 @@ function editmovie($id)
   $sinopsis = $_POST['sinopsis'];
   $studio   = $_POST['studio'];
   $status   = $_POST['status'];
-  if ($_FILES['file']['size'] == 0 && $_FILES['file']['error'] == 4) {
-    $gambar = $_POST['filename'];
-  } else {
+  $gambar   = $_POST['filename'];
+  if ($_FILES['file']['size'] != 0 && $_FILES['file']['error'] != 4) {
     $gambar = upload();
   }
   $sql = "UPDATE `movies` SET `judul`='" . $judul . "', `status`='" . $status . "', `studio`='" . $studio . "', `rilis`='" . $rilis . "', `rate`='" . $rate . "', `genre`='" . $genre . "', `sinopsis`='" . $sinopsis . "', `type`='" . $type . "', `episode`='$episode', `durasi`='" . $durasi . "', `gambar`='" . $gambar . "' WHERE `id`='$id' ";
   if (mysqli_query($con, $sql)) {
-    header('Location: listmovie.php');
+    header('Location: listmovie.php?current='.$current);
   } else {
     header('Location: editmoviec.php');
   }
@@ -124,6 +126,9 @@ function editmovie($id)
 function editepisode($id)
 {
   global $con;
+  $a = explode("-", $id);
+  $id = $a[0];
+  $current = $a[1];
   $judul    = $_POST['judul'];
   $link     = $_POST['link'];
   $episode  = $judul . " " . $_POST['episode'];
@@ -131,9 +136,23 @@ function editepisode($id)
 
   $sql = "UPDATE `episode` SET `judul`='" . $judul . "', `episode`='" . $episode . "',`link`='" . $link . "' WHERE `id` = '" . $id . "' ";
   if (mysqli_query($con, $sql)) {
-    header('Location: listepisode.php');
+    header('Location: listepisode.php?current=' . $current);
   } else {
     header('Location: editepisode.php');
+  }
+}
+
+function editgenre($id)
+{
+  global $con;
+  $nama    = ucfirst($_POST['name']);
+  $info    = $_POST['info'];
+
+  $sql = "UPDATE `genre` SET `nama`='" . $nama . "', `info`='" . $info . "'  WHERE `id` = '" . $id . "' ";
+  if (mysqli_query($con, $sql)) {
+    header('Location: genre.php');
+  } else {
+    die();
   }
 }
 
@@ -151,9 +170,9 @@ function deletemovie($id)
 function deletepisode($id)
 {
   global $con;
-  $sql = mysqli_query($con, 'DELETE FROM `episode` WHERE `episode` = "' . $id . '"');
+  $sql = mysqli_query($con, 'DELETE FROM `episode` WHERE `id` = "' . $id . '"');
   if ($sql) {
-    header(header('Location: listepisode.php'));
+    header('Location: listepisode.php');
   } else {
     die('gagal hapus');
   }
@@ -244,4 +263,23 @@ function getDataGenre($id, $table)
   global $con;
   $result = mysqli_query($con, 'SELECT * FROM `genre` WHERE `id` = "' . $id . '"');
   return mysqli_fetch_array($result);
+}
+
+function selectPage($number, $countquery)
+{
+  $arr = array();
+  switch ($number) {
+    case 1:
+      array_push($arr, $number++, $number++, $number);
+      return $arr;
+      break;
+    case (($number * 12) > $countquery) && ($countquery > 12*3):
+      array_push($arr, ($number - 2), ($number - 1), $number);
+      return $arr;
+      break;
+    default:
+      array_push($arr, ($number - 1), $number, ($number + 1));
+      return $arr;
+      break;
+  }
 }

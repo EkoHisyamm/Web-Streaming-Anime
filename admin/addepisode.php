@@ -6,7 +6,6 @@ if (isset($_POST['add'])) {
   addepisode();
 }
 
-$id = $_POST['id'];
 include 'tamplate/header.php'
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">

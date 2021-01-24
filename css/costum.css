@@ -1,39 +1,114 @@
-.product__item__text h5 a{
+.product__item__text h5 a {
     overflow: hidden;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
-h5 {
-    font-size: 20px;
+li a:link {
+    color: rgb(255, 255, 255);
+    background-color: transparent;
 }
 
 li a:hover {
     color: rgb(255, 255, 255);
     background-color: transparent;
-  }
+}
 
-  li a:visited {
+li a:visited {
     color: rgb(255, 255, 255);
     background-color: transparent;
-  }
+}
 
- li a:active {
+li a:active {
     color: rgb(255, 255, 255);
     background-color: transparent;
-  }
+}
 
-  .product__item__pic .view {
+.product__item__pic .view {
     background: #0c70de;
-    }
+}
 
-    .product__sidebar__view__item .view{
-        background: #0c70de;
-    }
+.product__sidebar__view__item .view {
+    background: #0c70de;
+}
 
-    .tab__index {
-        overflow: hidden;
+.tab__index {
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: unset;
+    gap: 10px;
+}
+
+.taxindex li {
+    width: 23%;
+}
+
+.genre a {
+    width: 32%;
+}
+
+.product__sidebar__view {
+    margin-bottom: 50px;
+}
+
+.conrekomend {
+    margin-top: 20%;
+}
+
+.rekomend {
+    max-width: 19.333%;
+    ;
+}
+
+.video {
+    height: 650px;
+}
+
+.navbar__search {
+    width: 15%;
+}
+
+@media only screen and (max-width: 600px) {
+    .taxindex li {
+        width: 48%;
+    }
+    .genre a {
+        width: 48%;
+    }
+    .product__sidebar {
+        padding-top: unset;
+    }
+    .conrekomend {
+        margin-top: 90%;
+    }
+    .rekomend {
+        max-width: 100%;
+    }
+    .video {
+        height: 205px;
+    }
+    .header__menu {
+        display: unset;
+    }
+    .header__menu ul li {
+        width: 48%;
         list-style: none;
-        padding: 0;        
+        display: inline-block;
+        position: relative;
+        margin-right: unset;
     }
+    .navbar__search {
+        width: 95%;
+    }
+
+    .navbar__search div {
+        position: unset;
+    }
+}
