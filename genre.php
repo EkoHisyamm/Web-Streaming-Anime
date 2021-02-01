@@ -2,7 +2,7 @@
 require 'admin/crud/config.php';
 include 'tamplate/header.php';
 
-$result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
+$topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMIT 3');
 $genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
 ?>
 
@@ -32,7 +32,7 @@ $genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
                 <?php
                 foreach ($genre as $data) {
                 ?>
-                  <li class="btn btn-dark" style=" margin-bottom: 5px; text-align: left;"><a><?php echo $data['nama']; ?></a></li>
+                  <a href="viewallq.php?current=genre&q=<?php echo $data['nama'];?>" class="btn btn-dark" style=" margin-bottom: 5px; text-align: left;"><li><?php echo $data['nama']; ?></li></a>
                 <?php
                 }
                 ?>
@@ -40,50 +40,7 @@ $genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-8">
-          <div class="product__sidebar">
-            <div class="product__sidebar__view">
-              <div class="section-title">
-                <h5>Top Views</h5>
-              </div>
-              <?php
-              $a = 0;
-              if (mysqli_num_rows($result)) {
-                foreach ($result as $row) {
-                  if ($a >= 3) {
-                    break;
-                  }
-                  $a++;
-              ?>
-                  <div class="filter__gallery set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
-                    <div class="product__sidebar__view__item set-bg mix day years" data-setbg="img/transparant.png" style="border-radius: 0;">
-                      <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
-                      <div class="ep"><?php echo $row['type'] ?></div>
-                      <div class="view"> <?php echo $row['status'] ?></div>
-                    </div>
-                  </div>
-              <?php
-                }
-              } ?>
-            </div>
-          </div>
-          <div class="product__sidebar">
-            <div class="product__sidebar__view">
-              <div class="section-title">
-                <h5>Genre</h5>
-              </div>
-              <div class="genre">
-                <?php
-                foreach ($genre as $data) {
-                ?>
-                  <a class="btn" style="color: white; margin-bottom: 5px; text-align: left;"><?php echo $data['nama'] ?></a>
-                <?php
-                }
-                ?>
-              </div>
-            </div>
-          </div>
-        </div>
+        <?php include "tamplate/sidebar.php"?>
       </div>
     </div>
   </section>

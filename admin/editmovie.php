@@ -1,197 +1,157 @@
 <?php
+session_start();
 require 'crud/config.php';
-
-$judul = $status = $studio = $rilis = $rate = $genre = $sinopsis = $type = $episode = $durasi;
-$gambar;
-
-if (isset($_POST['id']) && !empty($_POST['id'])) {
-    $id = $_POST['id'];
-
-    $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `id` = "'.$id.'"');
-    $row = mysqli_fetch_array($result);
-    deleteimg($row['gambar']); 
-
-    $judul      = $_POST['judul'];
-    $status     = $_POST['status'];
-    $studio     = $_POST['studio'];
-    $rilis      = $_POST['rilis'];
-    $rate       = $_POST['rate'];
-    $genre      = $_POST['genre'];
-    $sinopsis   = $_POST['sinopsis'];
-    $type       = $_POST['type'];
-    $episode    = $_POST['episode'];
-    $durasi     = $_POST['durasi'];
-    if($_FILES['file']['size']==0 && $_FILES['file']['error']==4){
-        $gambar = $_POST['filename'];
-    }else{
-        $gambar = upload();
-    }
-
-    $sql = "UPDATE movies SET judul=?, status=?, studio=?, rilis=?, rate=?, genre=?, sinopsis=?, type=?, episode=?, durasi=?, gambar=? WHERE id=?";
-
-    if ($stmt = mysqli_prepare($con, $sql)) {
-        mysqli_stmt_bind_param($stmt, "sssssssssssi", $pram_name, $pram_status, $pram_studio, $pram_rilis, $pram_rate, $pram_genre, $pram_sinopsis, $pram_type, $pram_episode, $pram_durasi, $pram_gambar, $pram_id);
-
-        $pram_name      = $judul;
-        $pram_status    = $status;
-        $pram_studio    = $studio;
-        $pram_rilis     = $rilis;
-        $pram_rate      = $rate;
-        $pram_genre     = $genre;
-        $pram_sinopsis  = $sinopsis;
-        $pram_type      = $type;
-        $pram_episode   = $episode;
-        $pram_durasi    = $durasi;
-        $pram_gambar    = $gambar;
-        $pram_id        = $id;
-
-        if (mysqli_stmt_execute($stmt)) {
-            // Records updated successfully. Redirect to landing page
-            header("location: listmovie.php");
-            exit();
-        }
-    }
-} else {
-    if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $id = trim($_GET['id']);
-
-        $sql = "SELECT * FROM movies WHERE id = ?";
-        if ($stmt = mysqli_prepare($con, $sql)) {
-            mysqli_stmt_bind_param($stmt, "i", $pram_id);
-
-            $pram_id = $id;
-
-            // Attempt to execute the prepared statement
-            if (mysqli_stmt_execute($stmt)) {
-                $result = mysqli_stmt_get_result($stmt);
-
-                if (mysqli_num_rows($result) == 1) {
-                    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-                    $judul      = $row['judul'];
-                    $status     = $row['status'];
-                    $studio     = $row['studio'];
-                    $rilis      = $row['rilis'];
-                    $rate       = $row['rate'];
-                    $genre      = $row['genre'];
-                    $sinopsis   = $row['sinopsis'];
-                    $type       = $row['type'];
-                    $episode    = $row['episode'];
-                    $durasi     = $row['durasi'];
-                    $gambar     = $row['gambar'];
-                }
-            }
-        }
-    }
+if (isset($_POST['add'])) {
+  editmovie($_GET['id'],$_GET['current'],$_GET['pages'],$_GET['q']);
 }
+$data = getData($_GET['id'], 'movies');
 include 'tamplate/header.php'
 ?>
+
 <body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        <?php
-        include 'tamplate/sidebar.php'
-        ?>
-        <div class="content-wrapper">
-            <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid" style="margin-top: 10px;">
-                    <!-- general form elements -->
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Edit Movie</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <form method="post" action="" enctype='multipart/form-data'>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="Judul">Judul</label>
-                                    <input name="judul" type="text" class="form-control" value="<?php echo $judul; ?>" placeholder="judul">
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="Durasi">Durasi</label>
-                                    <input name="durasi" type="text" class="form-control" value="<?php echo $durasi; ?>" placeholder="durasi">
-                                </div>
-                                <div class="form-group">
-                                    <label >Type</label>
-                                    <select name="type" class="custom-select rounded-0">
-                                        <option>BD</option>
-                                        <option <?php check($type,"TV"); ?>>TV</option>
-                                        <option <?php check($type,"Movie"); ?>>Movie</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Episode">Episode</label>
-                                    <input name="episode" type="text" class="form-control" value="<?php echo $episode; ?>" placeholder="episode">
-                                </div>
-                                <div class="form-group">
-                                    <label for="Status">Status</label>
-                                    <select name="status" class="custom-select rounded-0">
-                                        <option >Ongoing</option>
-                                        <option <?php check($status,"Complated"); ?>>Complated</option>
-                                    </select>
-                                </div>
-                                </div>
-                                <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="Studio">Studio</label>
-                                    <input name="studio" type="text" class="form-control" value="<?php echo $studio; ?>" placeholder="studio">
-                                </div>
-                                <div class="form-group">
-                                    <label for="Rilis Date">Rilis Date</label>
-                                    <input name="rilis" type="text" class="form-control" value="<?php echo $rilis; ?>" placeholder="rilis">
-                                </div>
-                                <div class="form-group">
-                                    <label for="Rate">Rate</label>
-                                    <input name="rate" type="text" class="form-control" value="<?php echo $rate; ?>" placeholder="rate">
-                                </div>
-                                <div class="form-group">
-                                    <label for="Genre">Genre</label>
-                                    <input name="genre" type="text" class="form-control" value="<?php echo $genre; ?>" placeholder="genre">
-                                </div>
-                                </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Sinopsis">Sinopsis</label>
-                                    <textarea name="sinopsis" type="text" style="height: 250px;" class="form-control" placeholder="Sinopsis"><?php echo $sinopsis; ?></textarea>
-                                </div>
-
-                                <input type="hidden" name="id" value="<?php echo $id; ?>" />
-
-                                <div class="form-group">
-                                    <label for="Cover">
-                                        <Cap>Cover</Cap>
-                                    </label>
-                                    <div class="custom-file">
-                                        <input name="file" type="file" class="custom-file-input costumfile">
-                                        <label class="custom-file-label filename" for="cover"><?php echo $gambar ?></label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <button name="submit" type="submit" class="btn btn-primary float-right">Upload</button>
-                            </div>
+  <div class="wrapper">
+    <?php
+    include 'tamplate/sidebar.php'
+    ?>
+    <div class="content-wrapper">
+      <!-- Content Wrapper. Contains page content -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Add New Series</h1>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <form action="" method="POST" enctype="multipart/form-data">
+            <div class="row">
+              <input type="hidden" name="id" value="15">
+              <!-- general form elements -->
+              <div class="col-md-9">
+                <input name="judul" type="text" class="form-control" placeholder="judul" value="<?php echo $data['judul'] ?>" style="font-size: 20px; margin-bottom: 10px;">
+                <textarea id="summernote" name="sinopsis" class="form-control"><?php echo $data['sinopsis'] ?></textarea>
+                <div class="card card-default">
+                  <div class="card-header">Cover</div>
+                  <div class="card-body">
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input name="file" type="file" class="custom-file-input costumfile">
+                        <input style="width: 100%;" class="custom-file-label filename" name="filename" for="cover" value="<?php echo $data['gambar'] ?>">
+                      </div>
+                      <div class="input-group-append">
+                        <a name="submit" class="btn btn-secondary btn-preview">preview</a>
+                      </div>
+                      <img class="preview" style="min-width: 100%;">
                     </div>
-                    <!-- /.card-body -->
-                    </form>
+                  </div>
                 </div>
-                <!-- /.card -->
-            </section>
-            <!-- /.content -->
+              </div>
+              <div class="col-md-3">
+                <div class="card card-default">
+                  <div class="card-header">Upload</div>
+                  <div class="card-body">
+                    <p>Saat anda telah selesai mengedit untuk menyimpanya klik save</p>
+                    <input name="add" class="float-right btn btn-danger" type="submit" value="save">
+                  </div>
+                </div>
+                <div class="card card-default">
+                  <div class="card-header">Series Info</div>
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label for="Durasi">Durasi</label>
+                      <input name="durasi" type="text" class="form-control" value="<?php echo $data['durasi'] ?>" placeholder="durasi">
+                    </div>
+                    <div class="form-group">
+                      <label for="status">Status</label>
+                      <select name="status" class="custom-select rounded-0">
+                        <option>Ongoing</option>
+                        <option <?php check($data['status'], "Complated"); ?>>Complated</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="Type">Type</label>
+                      <select name="type" class="custom-select rounded-0">
+                        <option>TV</option>
+                        <option <?php check($data['type'], "BD"); ?>>BD</option>
+                        <option <?php check($data['type'], "Movie"); ?>>Movie</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="Episode">Jumlah Episode</label>
+                      <input name="episode" type="number" class="form-control" value="<?php echo $data['episode'] ?>" placeholder="episode">
+                    </div>
+                    <div class="form-group">
+                      <label for="Studio">Studio</label>
+                      <input name="studio" type="text" class="form-control" value="<?php echo $data['studio'] ?>" placeholder="studio">
+                    </div>
+                    <div class="form-group">
+                      <label for="Rilis Date">Rilis Date</label>
+                      <input name="rilis" type="text" class="form-control" value="<?php echo $data['rilis'] ?>" placeholder="rilis">
+                    </div>
+                    <div class="form-group">
+                      <label for="Rate">Rate</label>
+                      <input name="rate" type="text" class="form-control" value="<?php echo $data['rate'] ?>" placeholder="rate">
+                    </div>
+                    <div class="form-group">
+                      <label for="Genre">Genre</label>
+                      <input name="genre" type="text" class="form-control" value="<?php echo $data['genre'] ?>" placeholder="genre">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
-        <?php
-        include 'tamplate/footer.php'
-        ?>
-    </div> 
-        <!-- /.content-wrapper -->
+        <!-- /.card -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <?php
+    include 'tamplate/footer.php'
+    ?>
+  </div>
 </body>
 <script>
-    $(document).ready(function() {
-        $('.costumfile').on('change',function(event) {
-            var test = event.target.files[0].name;
-            $('.filename').text(test);
-        })
+  $(document).ready(function() {
+    $('.costumfile').on('change', function(event) {
+      var test = event.target.files[0].name;
+      $('.filename').val(test);
+      if ($('.btn-preview').text() == "hide") {
+        $('.preview').attr("src", URL.createObjectURL($(this)[0].files[0]));
+      }
     })
+    $('.btn-preview').on('click', function(event) {
+      if ($('.costumfile')[0].files[0]) {
+        if ($('.btn-preview').text() == "preview") {
+          $('.btn-preview').text("hide");
+          $('.preview').attr("src", URL.createObjectURL($('.costumfile')[0].files[0]));
+        } else {
+          $('.btn-preview').text("preview");
+          $('.preview').removeAttr("src");
+        }
+      } else if ($('.filename').val() != "") {
+        if ($('.btn-preview').text() == "preview") {
+          var a = 'upload/' + $('.filename').val();
+          $('.preview').attr("src", a);
+          var a = $('.preview');
+          $('.btn-preview').text("hide");
+        } else {
+          $('.btn-preview').text("preview");
+          $('.preview').removeAttr("src");
+        }
+      }
+    })
+    // Summernote
+    $('#summernote').summernote()
+
+    // CodeMirror
+    CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+      mode: "htmlmixed",
+      theme: "monokai"
+    });
+  })
 </script>

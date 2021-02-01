@@ -3,8 +3,8 @@ require 'admin/crud/config.php';
 
 include 'tamplate/header.php';
 
-$result = mysqli_query($con, "SELECT * FROM `movies` WHERE 1");
-$genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
+$genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
+$topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMIT 3');
 ?>
 
 <body>
@@ -26,12 +26,13 @@ $genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="btn__all">
-                  <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
+                  <a href="viewall.php?current=ongoing" class="primary-btn">View All <span class="arrow_right"></span></a>
                 </div>
               </div>
             </div>
             <div class="row">
               <?php
+              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `status` = "Ongoing" LIMIT 6');
               foreach ($result as $row) {
                 if (strtolower($row['status']) == 'ongoing') {
               ?>
@@ -50,7 +51,7 @@ $genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
                             if ($i > 2)
                               break;
                           ?>
-                            <li><a href="#"><?php echo $gen[$i] ?></a></li>
+                            <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
                           <?php } ?>
                         </ul>
                         <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
@@ -72,12 +73,13 @@ $genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="btn__all">
-                  <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
+                  <a href="viewall.php?current=popular" class="primary-btn">View All <span class="arrow_right"></span></a>
                 </div>
               </div>
             </div>
             <div class="row">
               <?php
+              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `rate` > "8" LIMIT 6');
               if (mysqli_num_rows($result)) {
                 foreach ($result as $row) {
               ?>
@@ -91,58 +93,12 @@ $genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
                         <ul>
                           <?php
                           $genrelist = $row['genre'];
-                          $genre = explode(",", $genrelist);
-                          for ($i = 0; $i < count($genre); $i++) {
+                          $gen = explode(",", $genrelist);
+                          for ($i = 0; $i < count($gen); $i++) {
                             if ($i > 2)
                               break;
                           ?>
-                            <li><a href="#"><?php echo $genre[$i] ?></a></li>
-                          <?php } ?>
-                        </ul>
-                        <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
-                      </div>
-                    </div>
-                  </div>
-              <?php
-                }
-              }
-              ?>
-            </div>
-          </div>
-          <div class="recent__product">
-            <div class="row">
-              <div class="col-lg-8 col-md-8 col-sm-8">
-                <div class="section-title">
-                  <h4>Recently Added Shows</h4>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="btn__all">
-                  <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <?php
-              if (mysqli_num_rows($result)) {
-                foreach ($result as $row) {
-              ?>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="product__item">
-                      <div class="product__item__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
-                        <div class="ep"><?php echo $row['type'] ?></div>
-                        <div class="view"> <?php echo $row['status'] ?></div>
-                      </div>
-                      <div class="product__item__text">
-                        <ul>
-                          <?php
-                          $genrelist = $row['genre'];
-                          $genre = explode(",", $genrelist);
-                          for ($i = 0; $i < count($genre); $i++) {
-                            if ($i > 2)
-                              break;
-                          ?>
-                            <li><a href="#"><?php echo $genre[$i] ?></a></li>
+                            <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
                           <?php } ?>
                         </ul>
                         <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
@@ -159,17 +115,18 @@ $genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
             <div class="row">
               <div class="col-lg-8 col-md-8 col-sm-8">
                 <div class="section-title">
-                  <h4>Live Action</h4>
+                  <h4>Movie</h4>
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="btn__all">
-                  <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
+                  <a href="viewall.php?current=movie" class="primary-btn">View All <span class="arrow_right"></span></a>
                 </div>
               </div>
             </div>
             <div class="row">
               <?php
+              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `type` = "Movie" ');
               if (mysqli_num_rows($result)) {
                 foreach ($result as $row) {
               ?>
@@ -183,12 +140,12 @@ $genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
                         <ul>
                           <?php
                           $genrelist = $row['genre'];
-                          $genre = explode(",", $genrelist);
-                          for ($i = 0; $i < count($genre); $i++) {
+                          $gen = explode(",", $genrelist);
+                          for ($i = 0; $i < count($gen); $i++) {
                             if ($i > 2)
                               break;
                           ?>
-                            <li><a href="#"><?php echo $genre[$i] ?></a></li>
+                            <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
                           <?php } ?>
                         </ul>
                         <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
@@ -202,50 +159,7 @@ $genreku = mysqli_query($con, 'SELECT `nama` FROM `genre`');
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-8">
-          <div class="product__sidebar">
-            <div class="product__sidebar__view">
-              <div class="section-title">
-                <h5>Top Views</h5>
-              </div>
-              <?php
-              $a = 0;
-              if (mysqli_num_rows($result)) {
-                foreach ($result as $row) {
-                  if ($a >= 3) {
-                    break;
-                  }
-                  $a++;
-              ?>
-                  <div class="filter__gallery set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
-                    <div class="product__sidebar__view__item set-bg mix day years" data-setbg="img/transparant.png" style="border-radius: 0;">
-                      <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
-                      <div class="ep"><?php echo $row['type'] ?></div>
-                      <div class="view"> <?php echo $row['status'] ?></div>
-                    </div>
-                  </div>
-              <?php
-                }
-              } ?>
-            </div>
-          </div>
-          <div class="product__sidebar">
-            <div class="product__sidebar__view">
-              <div class="section-title">
-                <h5>Genre</h5>
-              </div>
-              <div class="genre">
-                <?php
-                foreach ($genreku as $data) {
-                ?>
-                  <a class="btn" style="color: white; margin-bottom: 5px; text-align: left;"><?php echo $data['nama'] ?></a>
-                <?php
-                }
-                ?>
-              </div>
-            </div>
-          </div>
-        </div>
+        <?php include "tamplate/sidebar.php"?>
       </div>
     </div>
   </section>

@@ -6,6 +6,8 @@ if (isset($_GET['id'])) {
   $id = trim($_GET['id']);
 }
 $detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
+$arr = mysqli_fetch_array($detail);
+$result = getEps($arr['judul']);
 ?>
 
 <body>
@@ -23,7 +25,7 @@ $detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
           foreach ($detail as $row) {
           ?>
             <div class="col-lg-3">
-              <div class="anime__details__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar'] ?>">
+              <div class="anime__details__pic set-bg" data-setbg="<?php echo $row['gambar'] ?>">
               </div>
             </div>
             <div class="col-lg-9">
@@ -61,7 +63,7 @@ $detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
                       $genre = explode(",", $genrelist);
                       for ($i = 0; $i < count($genre); $i++) {
                       ?>
-                        <a style="color: white;  margin-right: 5px; margin-bottom: 5px; padding: 5px 15px; font-size: 11px;" class="btn btn-dark"><?php echo $genre[$i] ?></a>
+                        <a href="viewallq.php?current=genre&q=<?php echo $genre[$i]; ?>" style="color: white;  margin-right: 5px; margin-bottom: 5px; padding: 5px 15px; font-size: 11px;" class="btn btn-dark"><?php echo $genre[$i] ?></a>
                       <?php
                       } ?>
                     </div>
@@ -73,20 +75,18 @@ $detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
                   </div>
                   <div style="overflow:auto; height: auto; max-height: 185px;">
                     <?php
-                    foreach ($detail as $arr) {
-                      for ($a = 0; $a < (int)$arr['episode']; $a++) {
-                        $b = $arr['id'] . '-' . ($a + 1);
+                    foreach ($result as $b) {
                     ?>
-                        <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id=<?php echo $b; ?>"><?php echo $a + 1 ?></a>
+                        <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
                     <?php
-                      }
                     }
                     ?>
                   </div>
                 </div>
               </div>
             </div>
-          <?php } ?>
+          <?php } 
+          ?>
         </div>
       </div>
     </div>

@@ -2,81 +2,54 @@
 session_start();
 require 'crud/config.php';
 
+$limit = 10;
+
+$active = "active";
+$pages = 1;
+$th = [];
+$q = $_GET['q'];
+
+if (isset($_GET['pages'])) {
+  $pages = $_GET['pages'];
+}
+
+$sql = mysqli_query($con, 'SELECT * FROM `genre`');
+if(!empty($q)){
+  $sql = mysqli_query($con, 'SELECT * FROM `genre` WHERE `nama` LIKE "%'.$q.'%"');
+}
+array_push($th, 'nama', 'info');
+
+while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
+  $result[] = $a;
+}
+
+$lenght = mysqli_num_rows($sql);
+$result = limitSql($sql, $pages, $limit);
+
+if(empty($result)){
+  $pages = ceil($lenght/$limit);
+  if(!empty($q)){
+    $pages = $pages.'&q='.$q;
+  }
+  header('Location: ?pages='.$pages);
+}
+
+$arr = selectPage($pages, $lenght, $limit);
+
 if (isset($_POST['add'])) {
   if ($_POST['add'] == "Add") {
     addgenre();
   } else {
-    editgenre($_POST['id']);
+    if(!empty($q)){
+      $pages = $pages.'&q='.$q;
+    }
+    editgenre($_POST['id'],$pages);
   }
 }
-
 if (isset($_POST['delete'])) {
-  deletegenre($_POST['id']);
+  deletegenre($_POST['id'],$pages);
 }
 
-$lenght = mysqli_num_rows(mysqli_query($con, 'SELECT * FROM `genre`'));
-$search = $_GET['search'];
-
-switch (isset($_GET)) {
-  case ($_GET['page1']):
-    $arr = selectPage($_GET['page1'], $lenght);
-    $current = $_GET['page1'];
-    if (!empty($search)) {
-      $result = mysqli_query(
-        $con,
-        'SELECT * FROM genre
-      WHERE `nama` LIKE "%' . $search . '%"
-      ORDER BY judul ASC
-      LIMIT 12'
-      );
-      $lenght = mysqli_num_rows(mysqli_query($con, 'SELECT * FROM genre WHERE `nama` LIKE "%' . $search . '%"'));
-    }
-    break;
-  default:
-    $arr = selectPage(1, $lenght);
-    $current = 1;
-    if (!empty($search)) {
-      $result = mysqli_query(
-        $con,
-        'SELECT * FROM genre
-      WHERE `nama` LIKE "%' . $search . '%"
-      ORDER BY judul ASC
-      LIMIT 12'
-      );
-      $lenght = mysqli_num_rows(mysqli_query($con, 'SELECT * FROM genre WHERE `nama` LIKE "%' . $search . '%"'));
-    }
-    break;
-}
-
-if (isset($_GET['search']) && !empty($search)) {
-  $sql =
-    'SELECT * FROM genre
-  WHERE `nama` LIKE "%' . $search . '%"
-  ORDER BY `nama` ASC
-  LIMIT ?,?';
-  if ($stmt = mysqli_prepare($con, $sql)) {
-    mysqli_stmt_bind_param($stmt, "ii", $pram_limit, $pram_offset);
-
-    $pram_limit = (($current * 12) - 12);
-    $pram_offset = 12;
-
-    if (mysqli_stmt_execute($stmt)) {
-      $result = mysqli_stmt_get_result($stmt);
-    }
-  }
-} else {
-  $sql = 'SELECT * FROM `genre` LIMIT ?,?';
-  if ($stmt = mysqli_prepare($con, $sql)) {
-    mysqli_stmt_bind_param($stmt, "ii", $pram_limit, $pram_offset);
-
-    $pram_limit = (($current * 12) - 12);
-    $pram_offset = 12;
-
-    if (mysqli_stmt_execute($stmt)) {
-      $result = mysqli_stmt_get_result($stmt);
-    }
-  }
-}
 include 'tamplate/header.php'
 ?>
 
@@ -120,11 +93,7 @@ include 'tamplate/header.php'
                 <div class="card-header">
                   <div class="card-tools">
                     <form action="" method="GET">
-                      <ul class="pagination pagination-sm float-right pages">
-                        <li class="page-item"><input name="search" type="hidden" value="<?php echo $search ?>"></a></li>
-                        <li class="page-item"><input name="left" type="submit" class="page-link left" value="&laquo;"></a></li>
-                        <li class="page-item"><input name="page1" type="submit" class="page-link page1" value="<?php echo $arr[0]; ?>"></li>
-                      </ul>
+                      <ul class="pagination pagination-sm float-right pages"></ul>
                     </form>
                   </div>
                 </div>
@@ -133,21 +102,31 @@ include 'tamplate/header.php'
                   <table class="table" id="test">
                     <thead>
                       <tr>
-                        <th>Name</th>
-                        <th>Deskripsi</th>
+                        <?php
+                        foreach ($th as $a) {
+                        ?>
+                          <th><?php echo $a ?></th>
+                        <?php
+                        }
+                        ?>
                         <th style="width: 50px">Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
                       foreach ($result as $row) {
-                        $detail = implode(",", $row);
+                        $imp = implode(",",$row);
                       ?>
                         <tr>
-                          <td><?php echo $row['nama'] ?></td>
-                          <td><?php echo $row['info'] ?></td>
+                          <?php
+                          foreach ($th as $c) {
+                          ?>
+                            <td><?php echo $row[$c] ?></td>
+                          <?php
+                          }
+                          ?>
                           <td>
-                            <a href="" name="edit" data-id="<?php echo $detail ?>" title='Update Record' data-toggle='modal' class="edit"> <span class='fas fa-edit'></span></a>
+                            <a href="" name="edit" data-id="<?php echo $imp ?>" title='Update Record' data-toggle='modal' class="edit"> <span class='fas fa-edit'></span></a>
                             <a href="#deletemodal" name="delete" data-id="<?php echo $row['id'] ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
                           </td>
                         </tr>
@@ -198,21 +177,17 @@ include 'tamplate/header.php'
 </body>
 <script>
   $(document).ready(function() {
-    var count = <?php echo $lenght; ?>;
-    console.log("count" + <?php echo $arr[1]; ?>);
-    if (count > 12) {
-      $('.pages').append("<li class='page-item'><input name='page1' type='submit' class='page-link' value='<?php echo $arr[1]; ?>'></li>");
-      if (count > 24) {
-        $('.pages').append("<li class='page-item'><input name='page1' type='submit' class='page-link page3' value='<?php echo $arr[2]; ?>'></li>");
+    var count = <?php echo $lenght ?>;
+    var limit = <?php echo $limit ?>;
+    if (count > limit) {
+      $('.pages').append("<li><a href='?pages=<?php echo limitPage($pages, $lenght, $limit, 'left') ?>'class='page-link'>&laquo;</a></li>");
+      $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[0], $active) ?>'><a href='?pages=<?php echo $arr[0] ?>' class='page-link'><?php echo $arr[0] ?></a></li>");
+      $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[1], $active) ?>'><a href='?pages=<?php echo $arr[1] ?>' class='page-link'><?php echo $arr[1] ?></a></li>");
+      if (count > limit * 2) {
+        $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[2], $active) ?>'><a href='?pages=<?php echo $arr[2] ?>' class='page-link'><?php echo $arr[2] ?></a></li>");
       }
-      $('.pages').append("<li class='page-item'><input name='right' type='submit' class='page-link right' value='&raquo;'></li>");
+      $('.pages').append("<li><a href='?pages=<?php echo limitPage($pages, $lenght, $limit, 'right') ?>'class='page-link'>&raquo;</a></li>");
     }
-    $(".left").click(function() {
-      $('.page1').attr("type", "hidden");
-    })
-    $(".right").click(function() {
-      $('.page3').attr("type", "hidden");
-    })
     $(".delete").click(function() {
       var value = $(this).data("id");
       $(".id").val(value);
@@ -221,7 +196,6 @@ include 'tamplate/header.php'
     $('.edit').click(function() {
       var id = $(this).data('id');
       id = id.split(",");
-      console.log(id);
       $('.id').val(id[0]);
       $('.inputnama').val(id[1]);
       $('.inputinfo').val(id[2]);

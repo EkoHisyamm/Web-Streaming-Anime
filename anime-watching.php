@@ -5,10 +5,11 @@ include 'tamplate/header.php';
 if (isset($_GET['id'])) {
   $id = trim($_GET['id']);
 }
-$detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
+$detail = mysqli_query($con, "SELECT * FROM `episode` WHERE `id` = '$id'");
 $detail = mysqli_fetch_array($detail);
 $result = mysqli_query($con, "SELECT * FROM `movies` LIMIT 5");
 $row = explode('-', $_GET['id']);
+$listeps = getEps($detail['judul']);
 ?>
 
 <body>
@@ -20,7 +21,7 @@ $row = explode('-', $_GET['id']);
         <div class="col-lg-12">
           <div class="anime__details__episodes">
             <div class="section-title">
-              <h5 style=""><?php echo $detail['judul'] . ' episode ' . $row[1] ?></h5>
+              <h5 style=""><?php echo $detail['judul'] . ' episode ' . $detail['episode'] ?></h5>
             </div>
           </div>
           <div class="anime__video__player">
@@ -32,9 +33,9 @@ $row = explode('-', $_GET['id']);
             </div>
             <div style="overflow:auto; height: auto; max-height: 185px;">
               <?php
-              for ($a = 0; $a < (int)$detail['episode']; $a++) {
+              foreach($listeps as $row){
               ?>
-                <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id= <?php echo $detail['id'] . '-' . ($a + 1); ?>"><?php echo $a + 1 ?></a>
+                <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id= <?php echo $row['id']?>"><?php echo $row['episode'] ?></a>
               <?php
               }
               ?>
@@ -55,7 +56,7 @@ $row = explode('-', $_GET['id']);
               ?>
                 <div class="col-lg-4 col-md-6 col-sm-6 rekomend">
                   <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
+                    <div class="product__item__pic set-bg" data-setbg="https://i.pinimg.com/originals/7b/17/2a/7b172aa8bf04c1bcbd3ad919457a86f2.jpg">
                       <div class="ep"><?php echo $row['type'] ?></div>
                       <div class="view"> <?php echo $row['status'] ?></div>
                     </div>
@@ -68,7 +69,7 @@ $row = explode('-', $_GET['id']);
                           if ($i > 2)
                             break;
                         ?>
-                          <li><a href="#"><?php echo $gen[$i] ?></a></li>
+                          <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i];?>"><?php echo $gen[$i] ?></a></li>
                         <?php } ?>
                       </ul>
                       <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>

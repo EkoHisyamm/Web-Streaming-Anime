@@ -3,7 +3,7 @@
   session_start();
 
   if(isset($_SESSION['LOGIN']) && $_SESSION['LOGIN'] === true){
-    header('Location: listmovie.php');
+    header('Location: listmovie.php?current=movie');
     exit;
   }
 

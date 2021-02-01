@@ -10,7 +10,8 @@ if (!isset($_SESSION['LOGIN']) || $_SESSION['LOGIN'] !== true) {
 
 $limit = 12;
 
-$action = "listmovieq.php";
+$action = "";
+$q = $_GET['q'];
 $current = $_GET['current'];
 $active = "active";
 $pages = 1;
@@ -22,11 +23,11 @@ if (isset($_GET['pages'])) {
 
 switch ($current) {
   case 'movie':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies`');
-    array_push($th, 'judul', 'genre', 'durasi', 'rate','rilis','type','studio','status');
+    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `judul` LIKE "%' . $q . '%"');
+    array_push($th, 'judul', 'genre', 'durasi', 'rate', 'rilis', 'type', 'studio', 'status');
     break;
   case 'episode':
-    $sql = mysqli_query($con, 'SELECT * FROM `episode`');
+    $sql = mysqli_query($con, 'SELECT * FROM `episode` WHERE `judul` LIKE "%' . $q . '%"');
     array_push($th, 'judul', 'episode');
     break;
 }
@@ -37,15 +38,18 @@ while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
 $lenght = mysqli_num_rows($sql);
 $result = limitSql($sql, $pages, $limit);
 
-if(empty($result)){
-  $pages = ceil($lenght/$limit);
-  header('Location: ?current='.$current.'&pages='.$pages);
+if (empty($result)) {
+  $pages = ceil($lenght / $limit);
+  if (!empty($q)) {
+    $pages = $pages . '&q=' . $q;
+  }
+  header('Location: ?current=' . $current . '&pages=' . $pages);
 }
 
 $arr = selectPage($pages, $lenght, $limit);
 
 if (isset($_POST['delete'])) {
-  delete($_POST['id'], $current, $pages,$current);
+  delete($_POST['id'], $current, $pages, $current);
 }
 ?>
 
@@ -72,8 +76,7 @@ if (isset($_POST['delete'])) {
                   $i = 0;
                   foreach ($th as $a) {
                     $i++;
-                    if($i > 2)
-                    {
+                    if ($i > 2) {
                       $hidden = 'hidden';
                     }
                   ?>
@@ -94,8 +97,7 @@ if (isset($_POST['delete'])) {
                     foreach ($th as $c) {
                       $i++;
                       $hidden = "";
-                      if($i > 2)
-                      {
+                      if ($i > 2) {
                         $hidden = 'hidden';
                       }
                     ?>
@@ -104,7 +106,7 @@ if (isset($_POST['delete'])) {
                     }
                     ?>
                     <td>
-                      <a href="edit<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
+                      <a href="edit<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages . '&q=' . $q ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
                       <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
                     </td>
                   </tr>
@@ -152,11 +154,11 @@ if (isset($_POST['delete'])) {
     var count = <?php echo $lenght ?>;
     var limit = <?php echo $limit ?>;
     if (count > limit) {
-      $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'left') ?>'class='page-link'>&laquo;</a></li>");
-      $('.pages').append("<li class='page-item <?php echo openPage($pages,$arr[0],$active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[0] ?>' class='page-link'><?php echo $arr[0] ?></a></li>");
-      $('.pages').append("<li class='page-item <?php echo openPage($pages,$arr[1],$active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[1] ?>' class='page-link'><?php echo $arr[1] ?></a></li>");
+      $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'left') ?>&q=<?php echo $q ?>'class='page-link'>&laquo;</a></li>");
+      $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[0], $active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[0] ?>&q=<?php echo $q ?>' class='page-link'><?php echo $arr[0] ?></a></li>");
+      $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[1], $active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[1] ?>&q=<?php echo $q ?>' class='page-link'><?php echo $arr[1] ?></a></li>");
       if (count > limit * 2) {
-        $('.pages').append("<li class='page-item <?php echo openPage($pages,$arr[2],$active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[2] ?>' class='page-link'><?php echo $arr[2] ?></a></li>");
+        $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[2], $active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[2] ?>&q=<?php echo $q ?>' class='page-link'><?php echo $arr[2] ?></a></li>");
       }
       $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'right') ?>'class='page-link'>&raquo;</a></li>");
     }

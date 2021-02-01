@@ -3,7 +3,7 @@ session_start();
 require 'crud/config.php';
 
 if (isset($_POST['add'])) {
-  editepisode($_GET['id']);
+  editepisode($_GET['id'],$_GET['current'],$_GET['pages'],$_GET['q']);
 }
 
 $data = getDataEpisode($_GET['id'], '');

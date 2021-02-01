@@ -25,7 +25,7 @@
         </ul>
         <ul class="nav nav-treeview">
           <li class="nav-item">
-            <a href="listepisode.php" class="nav-link">
+            <a href="listmovie.php?current=episode" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>All Episode</p>
             </a>
@@ -50,7 +50,7 @@
         </ul>
         <ul class="nav nav-treeview">
           <li class="nav-item">
-            <a href="listmovie.php" class="nav-link">
+            <a href="listmovie.php?current=movie" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>All Series</p>
             </a>

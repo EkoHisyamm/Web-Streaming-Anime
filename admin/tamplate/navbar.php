@@ -7,16 +7,15 @@
       </li>
     </ul>
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+    <form class="form-inline ml-3" action="<?php echo $action ?>" method="GET">
       <div class="input-group input-group-sm">
-        <form action="" method="GET">
-          <input class="form-control form-control-navbar" value="<?php echo $_GET['search'] ?>" name="search" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-navbar" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-        </form>
-      </div>
+        <input name="current" type="hidden" value="<?php echo $current?>">
+        <input class="form-control form-control-navbar" value="<?php echo $_GET['q'] ?>" name="q" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-navbar" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
       </div>
     </form>
     <!-- Right navbar links -->

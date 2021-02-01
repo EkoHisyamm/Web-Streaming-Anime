@@ -14,27 +14,19 @@
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li class=""><a href="./index.php">Home</a></li>
-                            <li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
-                                <ul class="dropdown">
-                                    <li><a href="./categories.html">Categories</a></li>
-                                    <li><a href="./anime-details.php">Anime Details</a></li>
-                                    <li><a href="./anime-watching.html">Anime Watching</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                    <li><a href="./signup.html">Sign Up</a></li>
-                                    <li><a href="./login.html">Login</a></li>
-                                </ul>
-                            </li>
                             <li><a href="./genre.php">Genre</a></li>
-                            <li><a href="#">Jadwal Rilis</a></li>
+                            <li><a href="viewall.php?current=ongoing">Ongoing</a></li>
+                            <li><a href="viewall.php?current=all anime">All Anime</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
             <div class="navbar__search">
                 <div class="header__right">
-                    <form class="form-inline ml-3" action="search.php" method="GET">
+                    <form class="form-inline ml-3" action="viewallq.php" method="GET">
                         <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" value="<?php $_GET['judul'] ?>" type="search" name='judul' placeholder="Search" aria-label="Search">
+                            <input type="hidden" name="current" value="search">
+                            <input class="form-control form-control-navbar" value="<?php  echo $_GET['q'] ?>" type="search" name='q' placeholder="Search" aria-label="Search">
                         </div>
                     </form>
                 </div>
