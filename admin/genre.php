@@ -1,6 +1,6 @@
 <?php
-session_start();
 require 'crud/config.php';
+include 'tamplate/header.php';
 
 $limit = 10;
 
@@ -13,7 +13,12 @@ if (isset($_GET['pages'])) {
   $pages = $_GET['pages'];
 }
 
-$sql = mysqli_query($con, 'SELECT * FROM `genre`');
+if ($pages == 0){
+  header('Location: genre.php');
+  die();
+}
+
+$sql = mysqli_query($con, 'SELECT * FROM `genre` ORDER BY `nama`');
 if(!empty($q)){
   $sql = mysqli_query($con, 'SELECT * FROM `genre` WHERE `nama` LIKE "%'.$q.'%"');
 }
@@ -49,8 +54,6 @@ if (isset($_POST['add'])) {
 if (isset($_POST['delete'])) {
   deletegenre($_POST['id'],$pages);
 }
-
-include 'tamplate/header.php'
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">

@@ -1,12 +1,6 @@
 <?php
 require 'crud/config.php';
 include 'tamplate/header.php';
-session_start();
-
-if (!isset($_SESSION['LOGIN']) || $_SESSION['LOGIN'] !== true) {
-  header('Location: index.php');
-  exit;
-}
 
 $limit = 12;
 
@@ -22,11 +16,12 @@ if (isset($_GET['pages'])) {
 
 switch ($current) {
   case 'movie':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies`');
-    array_push($th, 'judul', 'genre', 'durasi', 'rate','rilis','type','studio','status');
+    $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
+    `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC');
+    array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
     break;
   case 'episode':
-    $sql = mysqli_query($con, 'SELECT * FROM `episode`');
+    $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
     array_push($th, 'judul', 'episode');
     break;
 }
@@ -104,7 +99,7 @@ if (isset($_POST['delete'])) {
                     }
                     ?>
                     <td>
-                      <a href="edit<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
+                      <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages .'&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
                       <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
                     </td>
                   </tr>

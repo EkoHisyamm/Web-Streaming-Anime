@@ -11,23 +11,21 @@ if (isset($_GET['pages'])) {
 
 switch (isset($current)) {
   case $current == 'genre':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies`');
-    $sql = Genre($sql,$_GET['q']);
+    $sql = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `time` DESC');
+    $sql = Genre($sql, $_GET['q']);
     $lenght = count($sql);
     $title = $_GET['q'];
     break;
   case $current == 'search':
     $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `judul` LIKE "%' . $q . '%"');
     $lenght = mysqli_num_rows($sql);
-    $title = 'Search Result: '.$q;
+    $title = 'Search Result: ' . $q;
     break;
 }
 $result = limitSql($sql, $pages, 18);
+$result = anime($result);
 
 $arr = selectPage($pages, $lenght, 18);
-
-$genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
-$topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMIT 3');
 ?>
 
 <body>
@@ -54,10 +52,13 @@ $topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMI
               ?>
                 <div class="col-lg-4 col-md-6 col-sm-6">
                   <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar'] ?>">
-                      <div class="ep"><?php echo $row['type'] ?></div>
-                      <div class="view"> <?php echo $row['status'] ?></div>
-                    </div>
+                    <a href="anime-details.php?id=<?php echo $row['id'] ?>">
+                      <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar'] ?>">
+                        <div class="ep"><?php echo $row['type'] ?></div>
+                        <div class="comment" style="background-color: #e53637;">EP <?php echo $row[0] ?></div>
+                        <div class="view"> <?php echo $row['status'] ?></div>
+                      </div>
+                    </a>
                     <div class="product__item__text">
                       <ul>
                         <?php
@@ -114,12 +115,12 @@ $topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMI
     var count = <?php echo $lenght; ?>;
     if (count > 18) {
       $('.pages').append("<a current=<?php echo $_GET['current'] ?>&pages=<?php echo limitPage($pages, $lenght, 18, 'left') ?>&q=<?php echo $q ?>'><i class='fa fa-angle-double-left'></i></a>");
-      $('.pages').append("<a class='<?php echo openPage($pages,$arr[0],"current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[0] ?>&q=<?php echo $q ?>'><?php echo $arr[0] ?></a>");
-      $('.pages').append("<a class='<?php echo openPage($pages,$arr[1],"current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[1] ?>&q=<?php echo $q ?>'><?php echo $arr[1] ?></a>");
+      $('.pages').append("<a class='<?php echo openPage($pages, $arr[0], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[0] ?>&q=<?php echo $q ?>'><?php echo $arr[0] ?></a>");
+      $('.pages').append("<a class='<?php echo openPage($pages, $arr[1], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[1] ?>&q=<?php echo $q ?>'><?php echo $arr[1] ?></a>");
       if (count > 36) {
-        $('.pages').append("<a class='<?php echo openPage($pages,$arr[2],"current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[2] ?>&q=<?php echo $q ?>'><?php echo $arr[2] ?></a>");
+        $('.pages').append("<a class='<?php echo openPage($pages, $arr[2], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[2] ?>&q=<?php echo $q ?>'><?php echo $arr[2] ?></a>");
       }
-      $('.pages').append("<a href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo limitPage($pages,$lenght,18,"right") ?>&q=<?php echo $q ?>'><i class='fa fa-angle-double-right'></i></a>");
+      $('.pages').append("<a href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo limitPage($pages, $lenght, 18, "right") ?>&q=<?php echo $q ?>'><i class='fa fa-angle-double-right'></i></a>");
     }
   })
 </script>

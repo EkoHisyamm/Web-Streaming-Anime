@@ -3,15 +3,15 @@ require 'admin/crud/config.php';
 
 include 'tamplate/header.php';
 
-$genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
-$topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMIT 3');
+$topview = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
+`rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `views` DESC LIMIT 3');
 ?>
 
 <body>
   <!-- Page Preloder -->
-  <div id="preloder">
+  <!-- <div id="preloder">
     <div class="loader"></div>
-  </div>
+  </div> -->
   <?php include 'tamplate/navbar.php' ?>
   <section class="product spad">
     <div class="container">
@@ -32,34 +32,36 @@ $topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMI
             </div>
             <div class="row">
               <?php
-              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `status` = "Ongoing" LIMIT 6');
+              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `status` = "Currently Airing" ORDER BY `time` DESC LIMIT 6');
+              $result = anime($result);
               foreach ($result as $row) {
-                if (strtolower($row['status']) == 'ongoing') {
               ?>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="product__item">
-                      <div class="product__item__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="product__item">
+                    <a href="anime-details.php?id=<?php echo $row['id'] ?>">
+                      <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar']; ?>">
                         <div class="ep"><?php echo $row['type'] ?></div>
+                        <div class="comment" style="background-color: #e53637;">EP <?php echo $row[0] ?></div>
                         <div class="view"> <?php echo $row['status'] ?></div>
                       </div>
-                      <div class="product__item__text">
-                        <ul>
-                          <?php
-                          $genrelist = $row['genre'];
-                          $gen = explode(",", $genrelist);
-                          for ($i = 0; $i < count($gen); $i++) {
-                            if ($i > 2)
-                              break;
-                          ?>
-                            <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
-                          <?php } ?>
-                        </ul>
-                        <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
-                      </div>
+                    </a>
+                    <div class="product__item__text">
+                      <ul>
+                        <?php
+                        $genrelist = $row['genre'];
+                        $gen = explode(",", $genrelist);
+                        for ($i = 0; $i < count($gen); $i++) {
+                          if ($i > 2)
+                            break;
+                        ?>
+                          <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
+                        <?php } ?>
+                      </ul>
+                      <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
                     </div>
                   </div>
+                </div>
               <?php
-                }
               }
               ?>
             </div>
@@ -79,34 +81,36 @@ $topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMI
             </div>
             <div class="row">
               <?php
-              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `rate` > "8" LIMIT 6');
-              if (mysqli_num_rows($result)) {
-                foreach ($result as $row) {
+              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `rate` > "8" ORDER BY `time` DESC LIMIT 6 ');
+              $result = anime($result);
+              foreach ($result as $row) {
               ?>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="product__item">
-                      <div class="product__item__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
-                        <div class="ep"><?php echo $row['type'] ?></div>
-                        <div class="view"> <?php echo $row['status'] ?></div>
-                      </div>
-                      <div class="product__item__text">
-                        <ul>
-                          <?php
-                          $genrelist = $row['genre'];
-                          $gen = explode(",", $genrelist);
-                          for ($i = 0; $i < count($gen); $i++) {
-                            if ($i > 2)
-                              break;
-                          ?>
-                            <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
-                          <?php } ?>
-                        </ul>
-                        <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
-                      </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="product__item">
+                  <a href="anime-details.php?id=<?php echo $row['id'] ?>">
+                    <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar']; ?>">
+                      <div class="ep"><?php echo $row['type'] ?></div>
+                      <div class="comment" style="background-color: #e53637;">EP <?php echo $row[0] ?></div>
+                      <div class="view"> <?php echo $row['status'] ?></div>
+                    </div>
+                  </a>
+                    <div class="product__item__text">
+                      <ul>
+                        <?php
+                        $genrelist = $row['genre'];
+                        $gen = explode(",", $genrelist);
+                        for ($i = 0; $i < count($gen); $i++) {
+                          if ($i > 2)
+                            break;
+                        ?>
+                          <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
+                        <?php } ?>
+                      </ul>
+                      <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
                     </div>
                   </div>
+                </div>
               <?php
-                }
               }
               ?>
             </div>
@@ -126,16 +130,19 @@ $topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMI
             </div>
             <div class="row">
               <?php
-              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `type` = "Movie" ');
-              if (mysqli_num_rows($result)) {
-                foreach ($result as $row) {
+              $result = mysqli_query($con, 'SELECT * FROM `movies` WHERE `type` = "Movie" ORDER BY `time` DESC');
+              $result = anime($result);
+              foreach ($result as $row) {
               ?>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="product__item">
-                      <div class="product__item__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="product__item">
+                    <a href="anime-details.php?id=<?php echo $row['id'] ?>">
+                      <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar']; ?>">
                         <div class="ep"><?php echo $row['type'] ?></div>
+                        <div class="comment" style="background-color: #e53637;">EP <?php echo $row[0] ?></div>
                         <div class="view"> <?php echo $row['status'] ?></div>
                       </div>
+                    </a>
                       <div class="product__item__text">
                         <ul>
                           <?php
@@ -150,31 +157,20 @@ $topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMI
                         </ul>
                         <h5><a href="anime-details.php?id=<?php echo $row['id'] ?>"><?php echo $row['judul'] ?></a></h5>
                       </div>
-                    </div>
                   </div>
+                </div>
               <?php
-                }
               }
               ?>
             </div>
           </div>
         </div>
-        <?php include "tamplate/sidebar.php"?>
+        <?php include "tamplate/sidebar.php" ?>
       </div>
     </div>
   </section>
   <!-- Product Section End -->
   <?php include 'tamplate/footer.php' ?>
-  <!-- Search model Begin -->
-  <div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-      <div class="search-close-switch"><i class="icon_close"></i></div>
-      <form class="search-model-form">
-        <input type="text" id="search-input" placeholder="Search here.....">
-      </form>
-    </div>
-  </div>
-  <!-- Search model end -->
   <!-- Js Plugins -->
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>

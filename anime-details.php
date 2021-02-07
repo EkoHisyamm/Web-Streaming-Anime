@@ -31,8 +31,9 @@ $result = getEps($arr['judul']);
             <div class="col-lg-9">
               <div class="anime__details__text">
                 <div class="anime__details__title">
-                  <h3><?php echo $row['judul'] ?></h3>
+                  <h3 class="judul"><?php echo $row['judul'] ?></h3>
                   <span><?php echo $row['judul'] ?></span>
+                  <p class="views" style="display: none;"><?php echo $row['views'] ?></p>
                 </div>
                 <p><?php echo $row['sinopsis'] ?></p>
                 <div class="anime__details__widget">
@@ -63,7 +64,7 @@ $result = getEps($arr['judul']);
                       $genre = explode(",", $genrelist);
                       for ($i = 0; $i < count($genre); $i++) {
                       ?>
-                        <a href="viewallq.php?current=genre&q=<?php echo $genre[$i]; ?>" style="color: white;  margin-right: 5px; margin-bottom: 5px; padding: 5px 15px; font-size: 11px;" class="btn btn-dark"><?php echo $genre[$i] ?></a>
+                        <a href="viewallq.php?current=genre&q=<?php echo $genre[$i]; ?>" style="margin-right: 5px; margin-bottom: 5px; padding: 5px 15px; font-size: 11px;" class="btn btn-dark"><?php echo $genre[$i] ?></a>
                       <?php
                       } ?>
                     </div>
@@ -77,7 +78,7 @@ $result = getEps($arr['judul']);
                     <?php
                     foreach ($result as $b) {
                     ?>
-                        <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
+                        <a style="margin-right: 5px; margin-bottom: 10px;" class="btn_eps btn" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
                     <?php
                     }
                     ?>
@@ -117,3 +118,24 @@ $result = getEps($arr['judul']);
 </body>
 
 </html>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".btn_eps").click(function() {
+      $judul = $(".judul").text();
+      $view = $(".views").text();
+      $.ajax({
+        url: "admin/crud/views.php",
+        method: "POST",
+        data: {
+          view: $view,
+          judul: $judul,
+        },
+        dataType: "json",
+        success: function(data) {
+          console.log(data);
+        }
+      });
+    })
+  });
+</script>

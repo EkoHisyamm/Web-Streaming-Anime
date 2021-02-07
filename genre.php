@@ -2,8 +2,7 @@
 require 'admin/crud/config.php';
 include 'tamplate/header.php';
 
-$topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMIT 3');
-$genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
+$genre = mysqli_query($con, 'SELECT `nama` FROM `genre` ORDER BY `nama`');
 ?>
 
 <body>

@@ -20,14 +20,19 @@ $th = [];
 if (isset($_GET['pages'])) {
   $pages = $_GET['pages'];
 }
+if ($pages == 0){
+  header('Location: listmovie.php?current='.$current);
+  die();
+}
 
 switch ($current) {
   case 'movie':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `judul` LIKE "%' . $q . '%"');
-    array_push($th, 'judul', 'genre', 'durasi', 'rate', 'rilis', 'type', 'studio', 'status');
+    $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
+    `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` WHERE `judul` LIKE "%' . $q . '%"');
+    array_push($th, 'judul', 'durasi', 'rate', 'rilis', 'type', 'studio', 'status');
     break;
   case 'episode':
-    $sql = mysqli_query($con, 'SELECT * FROM `episode` WHERE `judul` LIKE "%' . $q . '%"');
+    $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` WHERE `judul` LIKE "%' . $q . '%"');
     array_push($th, 'judul', 'episode');
     break;
 }
@@ -49,7 +54,7 @@ if (empty($result)) {
 $arr = selectPage($pages, $lenght, $limit);
 
 if (isset($_POST['delete'])) {
-  delete($_POST['id'], $current, $pages, $current);
+  delete($_POST['id'], $current);
 }
 ?>
 
@@ -106,7 +111,7 @@ if (isset($_POST['delete'])) {
                     }
                     ?>
                     <td>
-                      <a href="edit<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages . '&q=' . $q ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
+                      <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages . '&q=' . $q. '&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
                       <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
                     </td>
                   </tr>

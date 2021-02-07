@@ -10,25 +10,24 @@ if (isset($_GET['pages'])) {
 
 switch ($current) {
   case 'ongoing':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `status` = "Ongoing"');
+    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `status` = "Currently Airing" ORDER BY `time`');
     break;
   case 'all anime':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies`');
+    $sql = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `time` DESC');
     break;
   case 'popular':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `rate` > "8"');
+    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `rate` > "8" ORDER BY `time` DESC');
     break;
   case 'movie':
-    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `type` = "Movie"');
+    $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `type` = "Movie" ORDER BY `time` DESC');
     break;
 }
 $lenght = mysqli_num_rows($sql);
 $result = limitSql($sql, $pages, 18);
+$result = anime($result);
 
 $arr = selectPage($pages, $lenght, 18);
 
-$genre = mysqli_query($con, 'SELECT `nama` FROM `genre`');
-$topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMIT 3');
 ?>
 
 <body>
@@ -55,10 +54,13 @@ $topview = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `views` DESC LIMI
               ?>
                 <div class="col-lg-4 col-md-6 col-sm-6">
                   <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="admin/upload/<?php echo $row['gambar']; ?>">
+                  <a href="anime-details.php?id=<?php echo $row['id'] ?>">
+                    <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar']; ?>">
                       <div class="ep"><?php echo $row['type'] ?></div>
+                      <div class="comment" style="background-color: #e53637;">EP <?php echo $row[0] ?></div>
                       <div class="view"> <?php echo $row['status'] ?></div>
                     </div>
+                  </a>
                     <div class="product__item__text">
                       <ul>
                         <?php

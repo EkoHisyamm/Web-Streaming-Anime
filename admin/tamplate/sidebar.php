@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="listmovie.php" class="brand-link">
+  <a href="listmovie.php?current=movie" class="brand-link">
     <span class="brand-text font-weight-light" style="font-size: 25px; font-weight: 700 !important; margin-left: 75px;">Admin</span>
   </a>
   <!-- Sidebar Menu -->
@@ -42,7 +42,7 @@
         </a>
         <ul class="nav nav-treeview">
           <li class="nav-item">
-            <a href="addmoviec.php" class="nav-link">
+            <a href="addmovie.php" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>Add Series</p>
             </a>
