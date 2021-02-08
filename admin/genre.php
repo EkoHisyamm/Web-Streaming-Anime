@@ -60,7 +60,7 @@ if (isset($_POST['delete'])) {
   <div class="wrapper">
     <?php
     include 'tamplate/navbar.php';
-    include 'tamplate/sidebar.php'
+    include 'tamplate/sidebar.php';
     ?>
     <div class="content-wrapper">
       <!-- Content Wrapper. Contains page content -->

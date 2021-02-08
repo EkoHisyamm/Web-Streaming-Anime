@@ -2,9 +2,6 @@
 require 'admin/crud/config.php';
 
 include 'tamplate/header.php';
-
-$topview = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
-`rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `views` DESC LIMIT 3');
 ?>
 
 <body>
