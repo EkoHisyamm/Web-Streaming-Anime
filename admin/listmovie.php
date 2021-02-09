@@ -168,7 +168,6 @@ if (isset($_POST['delete'])) {
           search : $(this).val()
         },
         success: function(data){
-          console.log(data);
           $('#listmovies').html(data);
         }
       });
