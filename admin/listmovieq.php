@@ -28,7 +28,7 @@ if ($pages == 0){
 switch ($current) {
   case 'movie':
     $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
-    `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` WHERE `judul` LIKE "%' . $q . '%"');
+    `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
     array_push($th, 'judul', 'durasi', 'rate', 'rilis', 'type', 'studio', 'status');
     break;
   case 'episode':

@@ -7,17 +7,15 @@
       </li>
     </ul>
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3" action="<?php echo $action ?>" method="GET">
-      <div class="input-group input-group-sm">
-        <input name="current" type="hidden" value="<?php echo $current?>">
-        <input class="form-control form-control-navbar" value="<?php echo $_GET['q'] ?>" name="q" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
+    <div class="input-group input-group-sm">
+      <!-- <input name="current" type="hidden" value=""> -->
+      <input class="form-control form-control-navbar" value="" id="search" type="search" placeholder="Search" aria-label="Search">
+      <div class="input-group-append">
+        <button class="btn btn-navbar" type="button">
+          <i class="fas fa-search"></i>
+        </button>
       </div>
-    </form>
+    </div>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
@@ -56,7 +54,6 @@
             </div>
           </form>
         </div>
-
       </div>
     </div>
   </div>
