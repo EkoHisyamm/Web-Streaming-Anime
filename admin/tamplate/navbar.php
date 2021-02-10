@@ -7,7 +7,7 @@
       </li>
     </ul>
     <!-- SEARCH FORM -->
-    <div class="input-group input-group-sm">
+    <div class="input-group input-group-sm" style="width: unset;">
       <!-- <input name="current" type="hidden" value=""> -->
       <input class="form-control form-control-navbar" value="" id="search" type="search" placeholder="Search" aria-label="Search">
       <div class="input-group-append">
