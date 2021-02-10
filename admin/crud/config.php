@@ -1,6 +1,6 @@
 <?php
 session_start();
-$con = mysqli_connect("localhost", "root", "a", "db_movieku");
+$con = mysqli_connect("localhost", "root", "", "db_movieku");
 
 // Check connection
 if (!$con) {

@@ -2,9 +2,8 @@
 require 'crud/config.php';
 include 'tamplate/header.php';
 
-$limit = 12;
+$limit = 10;
 
-$action = "listmovieq.php";
 $current = $_GET['current'];
 $active = "active";
 $pages = 1;
@@ -16,15 +15,15 @@ if (isset($_GET['pages'])) {
 
 switch ($current) {
   case 'movie':
-    $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
+  $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
     `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC');
-    array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
-    break;
+  array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
+  break;
 
   case 'episode':
-    $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
-    array_push($th, 'judul', 'episode');
-    break;
+  $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
+  array_push($th, 'judul', 'episode');
+  break;
 }
 
 while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
@@ -40,10 +39,6 @@ if (empty($result)) {
 }
 
 $arr = selectPage($pages, $lenght, $limit);
-
-if (isset($_POST['delete'])) {
-  delete($_POST['id'], $current, $pages, $current);
-}
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -63,7 +58,7 @@ if (isset($_POST['delete'])) {
           </div>
           <!-- /.card-header -->
           <div class="card-body p-0">
-            <table class="table" id="test">
+            <table class="table" id="listmovies">
               <thead>
                 <tr>
                   <?php
@@ -81,7 +76,7 @@ if (isset($_POST['delete'])) {
                   <th style="width: 50px">Action</th>
                 </tr>
               </thead>
-              <tbody id="listmovies">
+              <tbody>
                 <?php
                 foreach ($result as $row) {
                   ?>
@@ -117,17 +112,14 @@ if (isset($_POST['delete'])) {
                         </button>
                       </div>
                       <div class="modal-body" style="padding: 0;">
-                        <form method="post" action="">
-                          <input type="hidden" class="id" name="id" id="id" />
-                          <div class="card-body">
-                            <div class="form-group">
-                              <p for="Confirm">data yang telah dihapus tidak dapat di kembalikan</p>
-                            </div>
+                        <div class="card-body">
+                          <div class="form-group">
+                            <p for="Confirm">data yang telah dihapus tidak dapat di kembalikan</p>
                           </div>
-                          <div class="modal-footer">
-                            <button name="delete" type="submit" class="btn btn-danger">Delete</button>
-                          </div>
-                        </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button id="deleteModal" type="button" class="btn btn-danger">Delete</button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -157,19 +149,30 @@ if (isset($_POST['delete'])) {
       $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'right') ?>'class='page-link'>&raquo;</a></li>");
     }
 
+    var id;
     $(".delete").click(function() {
-      var value = $(this).data("id");
-      $(".id").val(value);
-    })
+      id = $(this).data("id");
+    });
+
+    var val = "<?php echo "$current" ?>";
+    $("#deleteModal").click(function() {
+      $.ajax({
+        url: "crud/delete.php",
+        method: "POST",
+        data : {idDel : id, showdata : val},
+        success: function(data){;
+          $('#listmovies').html(data);
+        }
+      });
+    });
 
     $('#search').on('keyup', function() {
-      var val = "<?php echo "$current" ?>"; 
       $.ajax({
         method: "POST",
         url:    "crud/searchmovie.php",
         data: { search : $(this).val(), different : val },
         success: function(data){
-          console.log(search);
+          console.log(data);
           $('#listmovies').html(data);
         }
       });
