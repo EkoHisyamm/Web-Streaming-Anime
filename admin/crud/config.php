@@ -499,3 +499,21 @@ function allanime($key, $sql)
   }
   return $d;
 }
+
+
+function comment($nama, $msg, $id){
+  global $con;
+
+  $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`movies_id`)
+                            VALUES ("'.$nama.'","'.$msg.'","'.$id.'")');
+
+  $getComment = mysqli_query($con, 'SELECT `name`,`msg` FROM `comment` WHERE `movies_id` = '.$id.'');
+  $a = [];
+  if($sql){
+    foreach ($getComment as $value) {
+      array_push($a,$value);
+    }
+    return $a;
+  }
+  return false;
+}

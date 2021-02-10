@@ -1,17 +1,8 @@
 <?php
 require 'admin/crud/config.php';
-
 include 'tamplate/header.php';
-
-$topview = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
-`rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `views` DESC LIMIT 3');
 ?>
-
 <body>
-  <!-- Page Preloder -->
-  <!-- <div id="preloder">
-    <div class="loader"></div>
-  </div> -->
   <?php include 'tamplate/navbar.php' ?>
   <section class="product spad">
     <div class="container">

@@ -95,6 +95,32 @@ $listeps = getEps($detail['judul']);
               ?>
             </div>
           </div>
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="anime__details__review comment">
+                <div class="section-title">
+                  <h5>Reviews</h5>
+                </div>
+                <div class="anime__review__item">
+                  <div class="anime__review__item__text">
+                    <h6>Chris Curry - <span>1 Hour ago</span></h6>
+                    <p>whachikan Just noticed that someone categorized this as belonging to the genre
+                      "demons" LOL</p>
+                  </div>
+                </div>
+              </div>
+              <div class="anime__details__form">
+                <div class="section-title">
+                  <h5 id="msg"></h5>
+                </div>
+                <form action="#">
+                  <input class="form-control" placeholder="Name" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
+                  <textarea style="color: #495057;" placeholder="Comment"></textarea>
+                  <button type="button" class="btn_comment"><i class="fa fa-location-arrow"></i> Review</button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -126,3 +152,28 @@ $listeps = getEps($detail['judul']);
 </body>
 
 </html>
+
+<script>
+  $(document).ready(function() {
+    $('.btn_comment').on('click', function(event) {
+      if ($('#msg').text() != "") {
+        $.ajax({
+          url: 'admin/crud/comment.php',
+          method: 'POST',
+          data: {
+            name: 'siapa',
+            msg: 'wah bagus sekali',
+            id: 104
+          },
+          dataType: 'json',
+          success: function(data) {
+            console.log(data);
+            $.each(data, function(key, value) {
+              $('.comment').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>Chris Curry - <span>1 Hour ago</span></h6><p>whachikan Just noticed that someone categorized this as belonging to the genre 'demons' LOL</p></div></div>");
+            })
+          }
+        });
+      }
+    });
+  });
+</script>
