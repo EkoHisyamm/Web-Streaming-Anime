@@ -20,6 +20,7 @@ switch ($current) {
     `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC');
   array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
   break;
+
   case 'episode':
   $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
   array_push($th, 'judul', 'episode');
@@ -81,30 +82,30 @@ if (isset($_POST['delete'])) {
               </thead>
               <tbody id="listmovies">
                 <?php
-                  foreach ($result as $row) {
-                    ?>
-                    <tr>
-                      <?php
-                      $i = 0;
-                      foreach ($th as $c) {
-                        $i++;
-                        $hidden = "";
-                        if($i > 2)
-                        {
-                          $hidden = 'hidden';
-                        }
-                        ?>
-                        <td class="<?php echo $hidden ?>"><?php echo $row[$c] ?></td>
-                        <?php
+                foreach ($result as $row) {
+                  ?>
+                  <tr>
+                    <?php
+                    $i = 0;
+                    foreach ($th as $c) {
+                      $i++;
+                      $hidden = "";
+                      if($i > 2)
+                      {
+                        $hidden = 'hidden';
                       }
                       ?>
-                      <td>
-                        <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages .'&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
-                        <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
-                      </td>
-                    </tr>
-                    <?php
-                  }
+                      <td class="<?php echo $hidden ?>"><?php echo $row[$c] ?></td>
+                      <?php
+                    }
+                    ?>
+                    <td>
+                      <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages .'&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
+                      <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
+                    </td>
+                  </tr>
+                  <?php
+                }
                 ?>
                 <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
@@ -155,18 +156,18 @@ if (isset($_POST['delete'])) {
       }
       $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'right') ?>'class='page-link'>&raquo;</a></li>");
     }
+
     $(".delete").click(function() {
       var value = $(this).data("id");
       $(".id").val(value);
     })
 
     $('#search').on('keyup', function() {
+      var x = "<?php echo "$current" ?>"; 
       $.ajax({
         method: "POST",
         url:    "crud/searchmovie.php",
-        data: {
-          search : $(this).val()
-        },
+        data: { search : $(this).val(), diff : x},
         success: function(data){
           $('#listmovies').html(data);
         }
