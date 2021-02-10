@@ -16,14 +16,14 @@ if (isset($_GET['pages'])) {
 
 switch ($current) {
   case 'movie':
-  $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
+    $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
     `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC');
-  array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
-  break;
+    array_push($th, 'judul', '', 'durasi', 'rate', 'rilis', 'type', 'studio', 'status');
+    break;
   case 'episode':
-  $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
-  array_push($th, 'judul', 'episode');
-  break;
+    $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
+    array_push($th, 'judul', 'episode');
+    break;
 }
 while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
   $result[] = $a;
@@ -32,15 +32,15 @@ while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
 $lenght = mysqli_num_rows($sql);
 $result = limitSql($sql, $pages, $limit);
 
-if(empty($result)){
-  $pages = ceil($lenght/$limit);
-  header('Location: ?current='.$current.'&pages='.$pages);
+if (empty($result)) {
+  $pages = ceil($lenght / $limit);
+  header('Location: ?current=' . $current . '&pages=' . $pages);
 }
 
 $arr = selectPage($pages, $lenght, $limit);
 
 if (isset($_POST['delete'])) {
-  delete($_POST['id'], $current, $pages,$current);
+  delete($_POST['id'], $current, $pages, $current);
 }
 ?>
 
@@ -54,6 +54,7 @@ if (isset($_POST['delete'])) {
       <section class="content" style="margin-top: 10px;">
         <div class="card">
           <div class="card-header">
+            <h4 style="display: inline" class="text-success text-uppercase"><b> <?php echo $current; ?> </b></h4>
             <div class="card-tools">
               <ul class="pages pagination pagination-sm float-right"></ul>
             </div>
@@ -67,44 +68,42 @@ if (isset($_POST['delete'])) {
                   $i = 0;
                   foreach ($th as $a) {
                     $i++;
-                    if($i > 2)
-                    {
+                    if ($i > 2) {
                       $hidden = 'hidden';
                     }
-                    ?>
+                  ?>
                     <th class="<?php echo $hidden ?>"><?php echo $a ?></th>
-                    <?php
+                  <?php
                   }
                   ?>
                   <th style="width: 50px">Action</th>
                 </tr>
               </thead>
-              <tbody id="listmovies">
+              <tbody>
                 <?php
-                  foreach ($result as $row) {
-                    ?>
-                    <tr>
-                      <?php
-                      $i = 0;
-                      foreach ($th as $c) {
-                        $i++;
-                        $hidden = "";
-                        if($i > 2)
-                        {
-                          $hidden = 'hidden';
-                        }
-                        ?>
-                        <td class="<?php echo $hidden ?>"><?php echo $row[$c] ?></td>
-                        <?php
-                      }
-                      ?>
-                      <td>
-                        <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages .'&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
-                        <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
-                      </td>
-                    </tr>
+                foreach ($result as $row) {
+                ?>
+                  <tr>
                     <?php
-                  }
+                    $i = 0;
+                    foreach ($th as $c) {
+                      $i++;
+                      $hidden = "";
+                      if ($i > 2) {
+                        $hidden = 'hidden';
+                      }
+                    ?>
+                      <td class="<?php echo $hidden ?>"><?php echo $row[$c] ?></td>
+                    <?php
+                    }
+                    ?>
+                    <td>
+                      <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages . '&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
+                      <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
+                    </td>
+                  </tr>
+                <?php
+                }
                 ?>
                 <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
@@ -148,10 +147,10 @@ if (isset($_POST['delete'])) {
     var limit = <?php echo $limit ?>;
     if (count > limit) {
       $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'left') ?>'class='page-link'>&laquo;</a></li>");
-      $('.pages').append("<li class='page-item <?php echo openPage($pages,$arr[0],$active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[0] ?>' class='page-link'><?php echo $arr[0] ?></a></li>");
-      $('.pages').append("<li class='page-item <?php echo openPage($pages,$arr[1],$active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[1] ?>' class='page-link'><?php echo $arr[1] ?></a></li>");
+      $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[0], $active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[0] ?>' class='page-link'><?php echo $arr[0] ?></a></li>");
+      $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[1], $active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[1] ?>' class='page-link'><?php echo $arr[1] ?></a></li>");
       if (count > limit * 2) {
-        $('.pages').append("<li class='page-item <?php echo openPage($pages,$arr[2],$active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[2] ?>' class='page-link'><?php echo $arr[2] ?></a></li>");
+        $('.pages').append("<li class='page-item <?php echo openPage($pages, $arr[2], $active) ?>'><a href='?current=<?php echo $current ?>&pages=<?php echo $arr[2] ?>' class='page-link'><?php echo $arr[2] ?></a></li>");
       }
       $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'right') ?>'class='page-link'>&raquo;</a></li>");
     }
@@ -159,18 +158,5 @@ if (isset($_POST['delete'])) {
       var value = $(this).data("id");
       $(".id").val(value);
     })
-
-    $('#search').on('keyup', function() {
-      $.ajax({
-        method: "POST",
-        url:    "crud/searchmovie.php",
-        data: {
-          search : $(this).val()
-        },
-        success: function(data){
-          $('#listmovies').html(data);
-        }
-      });
-    });
   });
 </script>

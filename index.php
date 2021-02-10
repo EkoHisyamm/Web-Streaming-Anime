@@ -1,14 +1,8 @@
 <?php
 require 'admin/crud/config.php';
-
 include 'tamplate/header.php';
 ?>
-
 <body>
-  <!-- Page Preloder -->
-  <!-- <div id="preloder">
-    <div class="loader"></div>
-  </div> -->
   <?php include 'tamplate/navbar.php' ?>
   <section class="product spad">
     <div class="container">
