@@ -2,7 +2,7 @@
 if (isset($_POST['search'])) {
 	require_once 'config.php';
 
-	if($_POST['diff'] == "movie"){
+	if($_POST['different'] == "movie"){
 		$sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
 			`rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
 
@@ -52,7 +52,7 @@ if (isset($_POST['search'])) {
 		}
 	} 
 
-	elseif ($_POST['diff'] == "episode") {
+	elseif ($_POST['different'] == "episode") {
 		$sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
 		foreach ($sql as $value) {
 			?>
