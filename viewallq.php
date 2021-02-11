@@ -114,7 +114,7 @@ $arr = selectPage($pages, $lenght, 18);
   $(document).ready(function() {
     var count = <?php echo $lenght; ?>;
     if (count > 18) {
-      $('.pages').append("<a current=<?php echo $_GET['current'] ?>&pages=<?php echo limitPage($pages, $lenght, 18, 'left') ?>&q=<?php echo $q ?>'><i class='fa fa-angle-double-left'></i></a>");
+      $('.pages').append("<a href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo limitPage($pages, $lenght, 18, 'left') ?>&q=<?php echo $q ?>'><i class='fa fa-angle-double-left'></i></a>");
       $('.pages').append("<a class='<?php echo openPage($pages, $arr[0], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[0] ?>&q=<?php echo $q ?>'><?php echo $arr[0] ?></a>");
       $('.pages').append("<a class='<?php echo openPage($pages, $arr[1], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[1] ?>&q=<?php echo $q ?>'><?php echo $arr[1] ?></a>");
       if (count > 36) {
