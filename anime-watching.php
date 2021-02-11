@@ -167,9 +167,9 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
     setInterval(console.log("oi"),5000);
 
     $('.btn_comment').on('click', function(event) {
-      var name = $('#name').val();
-      var msg = $('#msg').val();
-      var id_episode = $('#episode_id').text();
+      var name        = $('#name').val();
+      var msg         = $('#msg').val();
+      var id_episode  = $('#episode_id').text();
       
       if (msg != "") {
         if (name == "") {
