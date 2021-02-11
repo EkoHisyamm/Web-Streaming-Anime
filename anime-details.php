@@ -8,6 +8,7 @@ if (isset($_GET['id'])) {
 $detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
 $arr = mysqli_fetch_array($detail);
 $result = getEps($arr['judul']);
+
 ?>
 
 <body>
@@ -23,9 +24,13 @@ $result = getEps($arr['judul']);
         <div class="row">
           <?php
           foreach ($detail as $row) {
+            $bookmark = checkBookmark($_COOKIE['bookmark'],$row['id']);
           ?>
+            <p class="id" style="display: none;"><?php echo $row['id'] ?></p>
             <div class="col-lg-3">
-              <div class="anime__details__pic set-bg" data-setbg="<?php echo $row['gambar'] ?>">
+              <div class="anime__details__pic set-bg" data-setbg="<?php echo $row['gambar'] ?>"></div>
+              <div class="anime__details__btn" style="margin-top: 10px; width: 100%;">
+                <button id="bookmark" class="follow-btn" style="width: 100%; text-align: center; border: unset;"><i id="icon_bookmark" class="<?php echo $bookmark ?> fa-bookmark"></i> Bookmark</button>
               </div>
             </div>
             <div class="col-lg-9">
@@ -78,7 +83,7 @@ $result = getEps($arr['judul']);
                     <?php
                     foreach ($result as $b) {
                     ?>
-                        <a style="margin-right: 5px; margin-bottom: 10px;" class="btn_eps btn" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
+                      <a style="margin-right: 5px; margin-bottom: 10px;" class="btn_eps btn" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
                     <?php
                     }
                     ?>
@@ -86,10 +91,11 @@ $result = getEps($arr['judul']);
                 </div>
               </div>
             </div>
-          <?php } 
-          ?>
         </div>
+      <?php }
+      ?>
       </div>
+    </div>
     </div>
   </section>
   <!-- Anime Section End -->
@@ -121,6 +127,14 @@ $result = getEps($arr['judul']);
 
 <script type="text/javascript">
   $(document).ready(function() {
+    var icon = $('#icon_bookmark');
+    // document.cookie = "bookmark=";
+    var cookie = getCookie('bookmark');
+    var id = $('.id').text();
+    if (cookie == id) {
+      icon.attr('class', 'fas fa-bookmark');
+    }
+
     $(".btn_eps").click(function() {
       $judul = $(".judul").text();
       $view = $(".views").text();
@@ -132,10 +146,54 @@ $result = getEps($arr['judul']);
           judul: $judul,
         },
         dataType: "json",
-        success: function(data) {
-          console.log(data);
-        }
+        success: function(data) {}
       });
     })
+
+    $('#bookmark').click(function() {
+      if (icon.attr('class') == 'far fa-bookmark') {
+        icon.attr('class', 'fas fa-bookmark');
+        var a = cookie.split(',');
+        b = checkBookmark(id, a);
+        if (b == false) {
+          document.cookie = "bookmark=" + cookie + id + ",";
+          if(cookie == ""){
+          document.cookie = "bookmark=" + id + ",";
+          console.log('masuk');
+          }
+        }
+      } else {
+        icon.attr('class', 'far fa-bookmark');
+        document.cookie = "bookmark=" + cookie.replace(id + ',','');
+      }
+      console.log(b);
+      console.log(cookie);
+    });
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    function checkBookmark(id, listbookmark) {
+      var a = false;
+      console.log(listbookmark);
+      $.each(listbookmark, function(key, value) {
+        if (id == value) {
+          a = true;
+        }
+      })
+      return a;
+    }
   });
 </script>

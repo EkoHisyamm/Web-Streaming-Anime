@@ -17,6 +17,7 @@
                             <li><a href="./genre.php">Genre</a></li>
                             <li><a href="viewall.php?current=ongoing">Ongoing</a></li>
                             <li><a href="allanime.php">All Anime</a></li>
+                            <li><a href="viewall.php?current=bookmark">Bookmark</a></li>
                         </ul>
                     </nav>
                 </div>

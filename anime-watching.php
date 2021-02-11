@@ -19,6 +19,7 @@ $random = rand(0, mysqli_num_rows($result) - 5);
 $result = mysqli_query($con, "SELECT * FROM `movies` LIMIT $random,5");
 $result = anime($result);
 $listeps = getEps($detail['judul']);
+$comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . $id . '');
 ?>
 
 <body>
@@ -30,6 +31,7 @@ $listeps = getEps($detail['judul']);
         <div class="col-lg-12">
           <div class="anime__details__episodes">
             <div class="section-title">
+              <p style="display: none;" id="episode_id"><?php echo $id; ?></p>
               <a style="background-color: unset; padding: 0px;" href="anime-details.php?id=<?php echo $detailAnime['id'] ?>">
                 <h5 style=""><?php echo $detail['judul'] . ' episode ' . $detail['episode'] ?></h5>
               </a>
@@ -97,25 +99,32 @@ $listeps = getEps($detail['judul']);
           </div>
           <div class="row">
             <div class="col-lg-8">
-              <div class="anime__details__review comment">
+              <div class="anime__details__review">
                 <div class="section-title">
                   <h5>Reviews</h5>
                 </div>
-                <div class="anime__review__item">
-                  <div class="anime__review__item__text">
-                    <h6>Chris Curry - <span>1 Hour ago</span></h6>
-                    <p>whachikan Just noticed that someone categorized this as belonging to the genre
-                      "demons" LOL</p>
-                  </div>
+                <div id="commentlist">
+                  <?php
+                  foreach ($comment as $b) {
+                  ?>
+                    <div class="anime__review__item">
+                      <div class="anime__review__item__text">
+                        <h6><?php echo $b['name']; ?> - <span>1 Hour ago</span></h6>
+                        <p><?php echo $b['msg']; ?></p>
+                      </div>
+                    </div>
+                  <?php
+                  }
+                  ?>
                 </div>
               </div>
               <div class="anime__details__form">
                 <div class="section-title">
-                  <h5 id="msg"></h5>
+                  <h5>your comments</h5>
                 </div>
                 <form action="#">
-                  <input class="form-control" placeholder="Name" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
-                  <textarea style="color: #495057;" placeholder="Comment"></textarea>
+                  <input id="name" class="form-control" placeholder="Name" value="Wukong" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
+                  <textarea id="msg" style="color: #495057;" placeholder="Comment"></textarea>
                   <button type="button" class="btn_comment"><i class="fa fa-location-arrow"></i> Review</button>
                 </form>
               </div>
@@ -155,22 +164,30 @@ $listeps = getEps($detail['judul']);
 
 <script>
   $(document).ready(function() {
+    setInterval(console.log("oi"),5000);
+
     $('.btn_comment').on('click', function(event) {
-      if ($('#msg').text() != "") {
+      var name = $('#name').val();
+      var msg = $('#msg').val();
+      var id_episode = $('#episode_id').text();
+      
+      if (msg != "") {
+        if (name == "") {
+          name = "wukong";
+        }
         $.ajax({
           url: 'admin/crud/comment.php',
           method: 'POST',
           data: {
-            name: 'siapa',
-            msg: 'wah bagus sekali',
-            id: 104
+            name: name,
+            msg: msg,
+            ideps: id_episode
           },
           dataType: 'json',
           success: function(data) {
-            console.log(data);
-            $.each(data, function(key, value) {
-              $('.comment').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>Chris Curry - <span>1 Hour ago</span></h6><p>whachikan Just noticed that someone categorized this as belonging to the genre 'demons' LOL</p></div></div>");
-            })
+            $('#commentlist').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 Hour ago</span></h6><p>" + msg + "</p></div></div>");
+            $('#name').val("");
+            $('#msg').val("");
           }
         });
       }
