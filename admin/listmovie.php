@@ -1,51 +1,51 @@
 <?php
-require 'crud/config.php';
-include 'tamplate/header.php';
+  require 'crud/config.php';
+  include 'tamplate/header.php';
 
-$limit = 10;
+  $limit = 10;
 
-$current = $_GET['current'];
-$active = "active";
-$pages = 1;
-$th = [];
+  $current = $_GET['current'];
+  $active = "active";
+  $pages = 1;
+  $th = [];
 
-if (isset($_GET['pages'])) {
-  $pages = $_GET['pages'];
-}
+  if (isset($_GET['pages'])) {
+    $pages = $_GET['pages'];
+  }
 
-switch ($current) {
-  case 'movie':
-  $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
-    `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC');
-  array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
-  break;
+  switch ($current) {
+    case 'movie':
+    $sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
+      `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC');
+    array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
+    break;
 
-  case 'episode':
-  $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
-  array_push($th, 'judul', 'episode');
-  break;
-}
+    case 'episode':
+    $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
+    array_push($th, 'judul', 'episode');
+    break;
+  }
 
-while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
-  $result[] = $a;
-}
+  while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
+    $result[] = $a;
+  }
 
-$lenght = mysqli_num_rows($sql);
-$result = limitSql($sql, $pages, $limit);
+  $lenght = mysqli_num_rows($sql);
+  $result = limitSql($sql, $pages, $limit);
 
-if (empty($result)) {
-  $pages = ceil($lenght / $limit);
-  header('Location: ?current=' . $current . '&pages=' . $pages);
-}
+  if (empty($result)) {
+    $pages = ceil($lenght / $limit);
+    header('Location: ?current=' . $current . '&pages=' . $pages);
+  }
 
-$arr = selectPage($pages, $lenght, $limit);
+  $arr = selectPage($pages, $lenght, $limit);
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
     <?php
-    include 'tamplate/navbar.php';
-    include 'tamplate/sidebar.php';
+      include 'tamplate/navbar.php';
+      include 'tamplate/sidebar.php';
     ?>
     <div class="content-wrapper">
       <section class="content" style="margin-top: 10px;">
@@ -62,46 +62,47 @@ $arr = selectPage($pages, $lenght, $limit);
               <thead>
                 <tr>
                   <?php
-                  $i = 0;
-                  foreach ($th as $a) {
-                    $i++;
-                    if ($i > 2) {
-                      $hidden = 'hidden';
-                    }
-                    ?>
-                    <th class="<?php echo $hidden ?>"><?php echo $a ?></th>
-                    <?php
-                  }
-                  ?>
-                  <th style="width: 50px">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                foreach ($result as $row) {
-                  ?>
-                  <tr>
-                    <?php
                     $i = 0;
-                    foreach ($th as $c) {
+                    foreach ($th as $a) {
                       $i++;
-                      $hidden = "";
                       if ($i > 2) {
                         $hidden = 'hidden';
                       }
                       ?>
-                      <td class="<?php echo $hidden ?>"><?php echo $row[$c] ?></td>
+                        <th class="<?php echo $hidden ?>"><?php echo $a ?></th>
                       <?php
                     }
+                  ?>
+                  <th style="width: 50px">Action</th>
+                </tr>
+              </thead>
+              <tbody id="bodylist" >
+                <?php
+                  foreach ($result as $row) {
                     ?>
-                    <td>
-                      <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages . '&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
-                      <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
-                    </td>
-                  </tr>
-                  <?php
-                }
+                      <tr>
+                        <?php
+                          $i = 0;
+                          foreach ($th as $c) {
+                            $i++;
+                            $hidden = "";
+                            if ($i > 2) {
+                              $hidden = 'hidden';
+                            }
+                            ?>
+                              <td class="<?php echo $hidden ?>"><?php echo $row[$c] ?></td>
+                            <?php
+                          }
+                        ?>
+                        <td>
+                          <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages . '&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
+                          <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
+                        </td>
+                      </tr>
+                    <?php
+                  }
                 ?>
+
                 <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -131,10 +132,11 @@ $arr = selectPage($pages, $lenght, $limit);
       </section>
     </div>
     <?php
-    include 'tamplate/footer.php'
+      include 'tamplate/footer.php'
     ?>
   </div>
 </body>
+
 <script type="text/javascript">
   $(document).ready(function() {
     var count = <?php echo $lenght ?>;
@@ -157,10 +159,12 @@ $arr = selectPage($pages, $lenght, $limit);
     var val = "<?php echo "$current" ?>";
     $("#deleteModal").click(function() {
       $.ajax({
-        url: "crud/delete.php",
         method: "POST",
+        url: "crud/delete.php",
         data : {idDel : id, showdata : val},
         success: function(data){;
+          console.log(data);
+          $('#deletemodal').modal('hide');
           $('#listmovies').html(data);
         }
       });
@@ -172,7 +176,6 @@ $arr = selectPage($pages, $lenght, $limit);
         url:    "crud/searchmovie.php",
         data: { search : $(this).val(), different : val },
         success: function(data){
-          console.log(data);
           $('#listmovies').html(data);
         }
       });
