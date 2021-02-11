@@ -4,9 +4,12 @@ include 'tamplate/header.php';
 
 $current = $_GET['current'];
 $pages = 1;
+$cookie = $_COOKIE['bookmark'];
 if (isset($_GET['pages'])) {
   $pages = $_GET['pages'];
 }
+
+print_r($cookie);
 
 switch ($current) {
   case 'ongoing':
@@ -21,13 +24,16 @@ switch ($current) {
   case 'movie':
     $sql = mysqli_query($con, 'SELECT * FROM `movies` WHERE `type` = "Movie" ORDER BY `time` DESC');
     break;
+  case 'bookmark':
+    $sql = mysqli_query($con, 'SELECT * FROM `movies`');
+    $sql = viewBookmark($sql,$_COOKIE['bookmark']);
+    break;
 }
 $lenght = mysqli_num_rows($sql);
 $result = limitSql($sql, $pages, 18);
 $result = anime($result);
 
 $arr = selectPage($pages, $lenght, 18);
-
 ?>
 
 <body>
@@ -54,13 +60,13 @@ $arr = selectPage($pages, $lenght, 18);
               ?>
                 <div class="col-lg-4 col-md-6 col-sm-6">
                   <div class="product__item">
-                  <a href="anime-details.php?id=<?php echo $row['id'] ?>">
-                    <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar']; ?>">
-                      <div class="ep"><?php echo $row['type'] ?></div>
-                      <div class="comment" style="background-color: #e53637;">EP <?php echo $row[0] ?></div>
-                      <div class="view"> <?php echo $row['status'] ?></div>
-                    </div>
-                  </a>
+                    <a href="anime-details.php?id=<?php echo $row['id'] ?>">
+                      <div class="product__item__pic set-bg" data-setbg="<?php echo $row['gambar']; ?>">
+                        <div class="ep"><?php echo $row['type'] ?></div>
+                        <div class="comment" style="background-color: #e53637;">EP <?php echo $row[0] ?></div>
+                        <div class="view"> <?php echo $row['status'] ?></div>
+                      </div>
+                    </a>
                     <div class="product__item__text">
                       <ul>
                         <?php
@@ -110,6 +116,7 @@ $arr = selectPage($pages, $lenght, 18);
   <script src="js/owl.carousel.min.js"></script>
   <script src="js/main.js"></script>
 </body>
+
 </html>
 
 <script type="text/javascript">
@@ -117,10 +124,10 @@ $arr = selectPage($pages, $lenght, 18);
     var count = <?php echo $lenght; ?>;
     if (count > 18) {
       $('.pages').append("<a current=<?php echo $_GET['current'] ?>&pages=<?php echo limitPage($pages, $lenght, 18, 'left') ?>'><i class='fa fa-angle-double-left'></i></a>");
-      $('.pages').append("<a class='<?php echo openPage($pages,$arr[0],"current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[0] ?>'><?php echo $arr[0] ?></a>");
-      $('.pages').append("<a class='<?php echo openPage($pages,$arr[1],"current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[1] ?>'><?php echo $arr[1] ?></a>");
+      $('.pages').append("<a class='<?php echo openPage($pages, $arr[0], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[0] ?>'><?php echo $arr[0] ?></a>");
+      $('.pages').append("<a class='<?php echo openPage($pages, $arr[1], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[1] ?>'><?php echo $arr[1] ?></a>");
       if (count > 36) {
-        $('.pages').append("<a class='<?php echo openPage($pages,$arr[2],"current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[2] ?>'><?php echo $arr[2] ?></a>");
+        $('.pages').append("<a class='<?php echo openPage($pages, $arr[2], "current-page") ?>' href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo $arr[2] ?>'><?php echo $arr[2] ?></a>");
       }
       $('.pages').append("<a href='?current=<?php echo $_GET['current'] ?>&pages=<?php echo limitPage($pages, $lenght, 18, "right") ?>'><i class='fa fa-angle-double-right'></i></a>");
     }

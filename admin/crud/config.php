@@ -122,18 +122,18 @@ function editmovie($id, $current, $pages, $q = "")
   $gambar   = $_POST['gambar'];
 
   $sql = mysqli_query($con, 'UPDATE `movies` SET
-`judul`     = "'.$judul.'",
-`gambar`    = "'.$gambar.'",
-`episode`   = "'.$episode.'",
-`status`    = "'.$status.'",
-`studio`    = "'.$studio.'",
-`rilis`     = "'.$rilis.'",
-`rate`      = "'.$rate.'",
-`genre`     = "'.$genre.'",
-`durasi`    = "'.$durasi.'",
-`type`      = "'.$type.'",
-`sinopsis`  = "'.$sinopsis.'"
- WHERE `id` = "'.$id.'"');
+`judul`     = "' . $judul . '",
+`gambar`    = "' . $gambar . '",
+`episode`   = "' . $episode . '",
+`status`    = "' . $status . '",
+`studio`    = "' . $studio . '",
+`rilis`     = "' . $rilis . '",
+`rate`      = "' . $rate . '",
+`genre`     = "' . $genre . '",
+`durasi`    = "' . $durasi . '",
+`type`      = "' . $type . '",
+`sinopsis`  = "' . $sinopsis . '"
+ WHERE `id` = "' . $id . '"');
   if ($sql) {
     if (!empty($q)) {
       header('Location: listmovieq.php?current=' . $current . '&pages=' . $pages . '&q=' . $q);
@@ -429,7 +429,7 @@ function getMAL($link, $judul_p)
   $score = getStringBetween($score, '>', '<');
   $sinopsis = getStringBetween($link, 'description">', '</p>');
   $gambar = getStringBetween($link, 'class="lazyload" data-src="', '"');
-  $sinopsis = str_replace('&quot;',' ',$sinopsis);
+  $sinopsis = str_replace('&quot;', ' ', $sinopsis);
 
   $judul = trim($judul);
   $cek = checkJudul($judul, $judul_p);
@@ -501,19 +501,49 @@ function allanime($key, $sql)
 }
 
 
-function comment($nama, $msg, $id){
+function comment($nama, $msg, $id_eps)
+{
   global $con;
 
-  $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`movies_id`)
-                            VALUES ("'.$nama.'","'.$msg.'","'.$id.'")');
+  $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`episode_id`)
+                            VALUES ("' . $nama . '","' . $msg . '",'.$id_eps.')');
 
-  $getComment = mysqli_query($con, 'SELECT `name`,`msg` FROM `comment` WHERE `movies_id` = '.$id.'');
-  $a = [];
-  if($sql){
-    foreach ($getComment as $value) {
-      array_push($a,$value);
-    }
-    return $a;
+  // $getComment = mysqli_query($con, 'SELECT `name`,`msg` FROM `comment` WHERE `movies_id` = ' . $id . '');
+  // $a = [
+  //   'nama' => $nama,
+  //   'msg' => $msg,
+  //   'id' => $id,
+  // ];
+  if ($sql) {
+    // foreach ($getComment as $value) {
+    //   array_push($a, $value);
+    // }
+    return true;
   }
   return false;
+}
+
+function checkBookmark($listBookmark, $id)
+{
+  $listBookmark = explode(',', $listBookmark);
+  foreach ($listBookmark as $a) {
+    if ($a == $id) {
+      return 'fas';
+    }
+  }
+  return 'far';
+}
+
+function viewBookmark($dataAnime, $listBookmark)
+{
+  $listBookmark = explode(',', $listBookmark);
+  $a = [];
+  foreach ($dataAnime as $b) {
+    foreach ($listBookmark as $c) {
+      if ($b['id'] == $c) {
+        array_push($a,$b);
+      }
+    }
+  }
+  return $a;
 }
