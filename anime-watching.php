@@ -105,15 +105,21 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
                 </div>
                 <div id="commentlist">
                   <?php
-                  foreach ($comment as $b) {
+                  if (count(mysqli_fetch_assoc($comment)) == 0) {
                   ?>
-                    <div class="anime__review__item">
-                      <div class="anime__review__item__text">
-                        <h6><?php echo $b['name']; ?> - <span>1 Hour ago</span></h6>
-                        <p><?php echo $b['msg']; ?></p>
+                    <p style="color: white;" class="first_comment">Jadilah yang pertama berkomentar</p>
+                    <?php
+                  } else {
+                    foreach ($comment as $b) {
+                    ?>
+                      <div class="anime__review__item child">
+                        <div class="anime__review__item__text">
+                          <h6><?php echo $b['name']; ?> - <span>1 Hour ago</span></h6>
+                          <p><?php echo $b['msg']; ?></p>
+                        </div>
                       </div>
-                    </div>
                   <?php
+                    }
                   }
                   ?>
                 </div>
@@ -123,7 +129,7 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
                   <h5>your comments</h5>
                 </div>
                 <form action="#">
-                  <input id="name" class="form-control" placeholder="Name" value="Wukong" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
+                  <input id="name" class="form-control" placeholder="Name" value="<?php echo $_COOKIE['name_comment']?>" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
                   <textarea id="msg" style="color: #495057;" placeholder="Comment"></textarea>
                   <button type="button" class="btn_comment"><i class="fa fa-location-arrow"></i> Review</button>
                 </form>
@@ -164,16 +170,40 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
 
 <script>
   $(document).ready(function() {
-    setInterval(console.log("oi"),5000);
+    var comment = JSON.parse('<?php echo json_encode($arr) ?>');
+    // setInterval(function() {
+    //   // $('#commentlist').children('.child').remove();
+    //   var id_episode = $('#episode_id').text();
+    //   $.ajax({
+    //     url: 'admin/crud/realtime.php',
+    //     method: 'POST',
+    //     data: {
+    //       id: id_episode,
+    //       comment: comment
+    //     },
+    //     dataType: 'json',
+    //     success: function(data) {
+    //       console.log(data);
+    //       if (data != null) {
+    //         $.each(data, function(key, value) {
+    //           $('#commentlist').append("<div class='anime__review__item child'><div class='anime__review__item__text'><h6>" + value['name'] + " - <span>1 Hour ago</span></h6><p>" + value['msg'] + "</p></div></div>");
+    //         });
+    //       }
+    //       // $('#commentlist').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 Hour ago</span></h6><p>" + msg + "</p></div></div>");
+    //       // $('#name').val("");
+    //       // $('#msg').val("");
+    //     }
+    //   });
+    // }, 5000);
 
     $('.btn_comment').on('click', function(event) {
-      var name        = $('#name').val();
-      var msg         = $('#msg').val();
-      var id_episode  = $('#episode_id').text();
-      
+      var name = $('#name').val();
+      var msg = $('#msg').val();
+      var id_episode = $('#episode_id').text();
+
       if (msg != "") {
         if (name == "") {
-          name = "wukong";
+          name = "Anonim";
         }
         $.ajax({
           url: 'admin/crud/comment.php',
@@ -185,12 +215,40 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
           },
           dataType: 'json',
           success: function(data) {
+            document.cookie = "name_comment="+name;
             $('#commentlist').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 Hour ago</span></h6><p>" + msg + "</p></div></div>");
-            $('#name').val("");
+            $('#name').val(getCookie('name_comment'));
             $('#msg').val("");
+            $('.first_comment').remove();
           }
         });
       }
     });
+
+    function subtractarrays(array1, array2) {
+      var difference = [];
+      for (var i = 0; i < array1.length; i++) {
+        if ($.inArray(array1[i], array2) == -1) {
+          difference.push(array1[i]);
+        }
+      }
+      return difference;
+    }
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
   });
 </script>
