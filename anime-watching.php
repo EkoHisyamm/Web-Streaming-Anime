@@ -10,16 +10,21 @@ $detail = mysqli_fetch_array($detail);
 $result = mysqli_query($con, "SELECT * FROM `movies`");
 foreach ($result as $anime) {
   if ($anime['judul'] == $detail['judul']) {
-    $detailAnime = $anime;
+    $detailAnime  = $anime;
+    $id_movie     = $anime['id'];
     break;
   }
 }
 
-$random = rand(0, mysqli_num_rows($result) - 5);
-$result = mysqli_query($con, "SELECT * FROM `movies` LIMIT $random,5");
-$result = anime($result);
-$listeps = getEps($detail['judul']);
-$comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . $id . '');
+$random   = rand(0, mysqli_num_rows($result) - 5);
+$result   = mysqli_query($con, "SELECT * FROM `movies` LIMIT $random,5");
+$result   = anime($result);
+$listeps  = getEps($detail['judul']);
+$comment  = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . $id . ' ORDER BY `time` DESC');
+
+lastWatch($id_movie, $detail['id']);
+recentWatch($id_movie);
+// print_r($_COOKIE['lastWatch']);
 ?>
 
 <body>
@@ -48,7 +53,7 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
               <?php
               foreach ($listeps as $row) {
               ?>
-                <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id= <?php echo $row['id'] ?>"><?php echo $row['episode'] ?></a>
+                <a style="margin-right: 5px; margin-bottom: 10px; font-weight: bold;" class="btn_eps btn <?php echo cekLastWatch($id_movie,$row['id']) ?>" href="anime-watching.php?id= <?php echo $row['id'] ?>"><?php echo $row['episode'] ?></a>
               <?php
               }
               ?>
@@ -99,7 +104,17 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
           </div>
           <div class="row">
             <div class="col-lg-8">
-              <div class="anime__details__review">
+            <div class="anime__details__form">
+                <div class="section-title">
+                  <h5>your comments</h5>
+                </div>
+                <form action="#">
+                  <input id="name" class="form-control" placeholder="Name" value="<?php echo $_COOKIE['name_comment'] ?>" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
+                  <textarea id="msg" style="color: #495057;" placeholder="Comment"></textarea>
+                  <button type="button" class="btn_comment float-right"><i class="fa fa-location-arrow"></i> Review</button>
+                </form>
+              </div>
+              <div class="anime__details__review" style="margin-top: 55px;">
                 <div class="section-title">
                   <h5>Reviews</h5>
                 </div>
@@ -114,7 +129,7 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
                     ?>
                       <div class="anime__review__item child">
                         <div class="anime__review__item__text">
-                          <h6><?php echo $b['name']; ?> - <span>1 Hour ago</span></h6>
+                          <h6><?php echo $b['name']; ?> - <span><?php echo timeComment($b['time']) ?></span></h6>
                           <p><?php echo $b['msg']; ?></p>
                         </div>
                       </div>
@@ -123,16 +138,6 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
                   }
                   ?>
                 </div>
-              </div>
-              <div class="anime__details__form">
-                <div class="section-title">
-                  <h5>your comments</h5>
-                </div>
-                <form action="#">
-                  <input id="name" class="form-control" placeholder="Name" value="<?php echo $_COOKIE['name_comment']?>" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
-                  <textarea id="msg" style="color: #495057;" placeholder="Comment"></textarea>
-                  <button type="button" class="btn_comment"><i class="fa fa-location-arrow"></i> Review</button>
-                </form>
               </div>
             </div>
           </div>
@@ -171,30 +176,6 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
 <script>
   $(document).ready(function() {
     var comment = JSON.parse('<?php echo json_encode($arr) ?>');
-    // setInterval(function() {
-    //   // $('#commentlist').children('.child').remove();
-    //   var id_episode = $('#episode_id').text();
-    //   $.ajax({
-    //     url: 'admin/crud/realtime.php',
-    //     method: 'POST',
-    //     data: {
-    //       id: id_episode,
-    //       comment: comment
-    //     },
-    //     dataType: 'json',
-    //     success: function(data) {
-    //       console.log(data);
-    //       if (data != null) {
-    //         $.each(data, function(key, value) {
-    //           $('#commentlist').append("<div class='anime__review__item child'><div class='anime__review__item__text'><h6>" + value['name'] + " - <span>1 Hour ago</span></h6><p>" + value['msg'] + "</p></div></div>");
-    //         });
-    //       }
-    //       // $('#commentlist').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 Hour ago</span></h6><p>" + msg + "</p></div></div>");
-    //       // $('#name').val("");
-    //       // $('#msg').val("");
-    //     }
-    //   });
-    // }, 5000);
 
     $('.btn_comment').on('click', function(event) {
       var name = $('#name').val();
@@ -215,8 +196,8 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
           },
           dataType: 'json',
           success: function(data) {
-            document.cookie = "name_comment="+name;
-            $('#commentlist').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 Hour ago</span></h6><p>" + msg + "</p></div></div>");
+            document.cookie = "name_comment=" + name;
+            $('#commentlist').prepend("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 seconds ago</span></h6><p>" + msg + "</p></div></div>");
             $('#name').val(getCookie('name_comment'));
             $('#msg').val("");
             $('.first_comment').remove();

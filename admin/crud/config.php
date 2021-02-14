@@ -504,20 +504,11 @@ function allanime($key, $sql)
 function comment($nama, $msg, $id_eps)
 {
   global $con;
+  $time = date('Y-m-d H:i:s');
 
-  $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`episode_id`)
-                            VALUES ("' . $nama . '","' . $msg . '",'.$id_eps.')');
-
-  // $getComment = mysqli_query($con, 'SELECT `name`,`msg` FROM `comment` WHERE `movies_id` = ' . $id . '');
-  // $a = [
-  //   'nama' => $nama,
-  //   'msg' => $msg,
-  //   'id' => $id,
-  // ];
+  $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`episode_id`,`time`)
+                            VALUES ("' . $nama . '","' . $msg . '",' . $id_eps . ',"' . $time . '")');
   if ($sql) {
-    // foreach ($getComment as $value) {
-    //   array_push($a, $value);
-    // }
     return true;
   }
   return false;
@@ -541,9 +532,122 @@ function viewBookmark($dataAnime, $listBookmark)
   foreach ($dataAnime as $b) {
     foreach ($listBookmark as $c) {
       if ($b['id'] == $c) {
-        array_push($a,$b);
+        array_push($a, $b);
       }
     }
   }
   return $a;
+}
+
+function recentWatch($newWatch)
+{
+  $listWatch = $_COOKIE['recentWatch'];
+  $arr       = [];
+  $listWatch = explode(',', $listWatch);
+  foreach ($listWatch as $value) {
+    if (!empty($value)) {
+      array_push($arr, $value);
+    }
+    if ($value == $newWatch) {
+      return false;
+    }
+  }
+
+  if (count($listWatch) > 4) {
+    array_shift($arr);
+  }
+  array_push($arr, $newWatch);
+
+  $recentWatch = '';
+  foreach ($arr as $value) {
+    if (!empty($value)) {
+      $recentWatch = $recentWatch . $value . ',';
+    }
+  }
+  setcookie('recentWatch', $recentWatch);
+}
+
+function getRecentWatch($recentWatch)
+{
+  global $con;
+  $movies = mysqli_query($con, 'SELECT * FROM `movies`');
+
+  $recentWatch = explode(',', $recentWatch);
+  $tampung     = [];
+  foreach ($recentWatch as $value) {
+    foreach ($movies as $value2) {
+      if ($value == $value2['id']) {
+        array_push($tampung, $value2);
+      }
+    }
+  }
+  return $tampung;
+}
+
+function lastWatch($judul, $episode)
+{
+  $last = $_COOKIE['last'][$judul];
+  if (empty($last)) {
+    setcookie("last[$judul]", "$episode,");
+  } else {
+    $get = explode(',', $last);
+    $cek = false;
+    foreach ($get as $value) {
+      if ($value == $episode) {
+        $cek = true;
+      }
+    }
+    if ($cek == false) {
+      $set = $last . $episode . ',';
+      setcookie("last[$judul]", "$set");
+    }
+  }
+}
+
+function cekLastWatch($judul, $episode)
+{
+  $last = $_COOKIE['last'][$judul];
+  $last = explode(',', $last);
+  foreach ($last as $value) {
+    if ($value == $episode) {
+      return 'text-primary';
+    }
+  }
+  return;
+}
+
+function timeComment($time)
+{
+  $time         = strtotime($time);
+  $seconds      = round(time() - $time);
+  $minute       = round($seconds / 60);
+  $hours        = round($seconds / 3600);       //value 3600 is 60 minutes * 60 sec  
+  $days         = round($seconds / 86400);      //86400 = 24 * 60 * 60;  
+  $weeks        = round($seconds / 604800);     // 7*24*60*60;  
+  $months       = round($seconds / 2629440);    //((365+365+365+365+366)/5/12)*24*60*60  
+  $years        = round($seconds / 31553280);
+
+  switch ($seconds) {
+    case $seconds < 60:
+      return $seconds.' seconds ago';
+      break;
+    case $minute < 60:
+      return $minute.' menit ago';
+      break;
+    case $hours < 24:
+      return $hours.' hours ago';
+      break;
+    case $days < 7:
+      return $days.' days ago';
+      break;
+    case $weeks < 4.3:
+      return $weeks.' week ago';
+      break;
+    case $months < 12:
+      return $months.' months ago';
+      break;
+    default:
+      return $years.' years ago';
+      break;
+  }
 }

@@ -27,7 +27,7 @@
                     <form class="form-inline ml-3" action="viewallq.php" method="GET">
                         <div class="input-group input-group-sm">
                             <input type="hidden" name="current" value="search">
-                            <input class="form-control form-control-navbar" value="<?php  echo $_GET['q'] ?>" type="search" name='q' placeholder="Search" aria-label="Search">
+                            <input class="form-control form-control-navbar" value="<?php  echo $_GET['q'] ?>" type="search" name='q' placeholder="search" aria-label="Search">
                         </div>
                     </form>
                 </div>

@@ -5,6 +5,6 @@
     $judul = $_POST['judul'];
 
     $sql = mysqli_query($con,'UPDATE `movies` SET `views` = "'.$view.'" WHERE `judul` = "'.$judul.'"');
-
+        
     echo json_encode($_POST['judul']);
 ?>

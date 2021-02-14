@@ -46,4 +46,41 @@
       </div>
     </div>
   </div>
+  <div class="product__sidebar__comment">
+    <div class="section-title">
+      <h5>Recent Watch</h5>
+    </div>
+    <?php
+    $recent = getRecentWatch($_COOKIE['recentWatch']);
+    if (count($recent) == 0) {
+    ?>
+      <p style="color: white;" class="first_comment">Anda belum pernah melihat apapun</p>
+    <?php
+    }
+    foreach ($recent as $rec) {
+    ?>
+      <div class="product__sidebar__comment__item">
+        <div class="product__sidebar__comment__item__pic" style="max-width: 30%;">
+          <img src="<?php echo $rec['gambar'] ?>" alt="">
+        </div>
+        <div class="product__sidebar__comment__item__text">
+          <ul>
+            <?php
+            $genrelist = $rec['genre'];
+            $gen = explode(",", $genrelist);
+            for ($i = 0; $i < count($gen); $i++) {
+              if ($i > 2)
+                break;
+            ?>
+              <li><a href="viewallq.php?current=genre&q=<?php echo $gen[$i] ?>"><?php echo $gen[$i] ?></a></li>
+            <?php } ?>
+          </ul>
+          <h5><a href="anime-details.php?id=<?php echo $rec['id'] ?>"><?php echo $rec['judul'] ?></a></h5>
+          <span><i class="fa fa-eye"></i><?php echo $rec['views'] ?></span>
+        </div>
+      </div>
+    <?php
+    }
+    ?>
+  </div>
 </div>

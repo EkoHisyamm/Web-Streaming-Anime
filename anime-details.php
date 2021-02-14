@@ -2,13 +2,13 @@
 require 'admin/crud/config.php';
 
 include 'tamplate/header.php';
+
 if (isset($_GET['id'])) {
-  $id = trim($_GET['id']);
+  $id   = trim($_GET['id']);
 }
 $detail = mysqli_query($con, "SELECT * FROM `movies` WHERE `id` = '$id'");
-$arr = mysqli_fetch_array($detail);
+$arr    = mysqli_fetch_array($detail);
 $result = getEps($arr['judul']);
-
 ?>
 
 <body>
@@ -83,7 +83,7 @@ $result = getEps($arr['judul']);
                     <?php
                     foreach ($result as $b) {
                     ?>
-                      <a style="margin-right: 5px; margin-bottom: 10px;" class="btn_eps btn" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
+                      <a style="margin-right: 5px; margin-bottom: 10px; font-weight: bold;" class="btn_eps btn <?php echo cekLastWatch($id,$b['id']) ?>" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
                     <?php
                     }
                     ?>
@@ -146,7 +146,10 @@ $result = getEps($arr['judul']);
           judul: $judul,
         },
         dataType: "json",
-        success: function(data) {}
+        success: function(data) { 
+          // console.log(data);
+          // document.cookie = "recent=" + "teststst";
+        }
       });
     })
 
