@@ -20,7 +20,8 @@ DROP TABLE IF EXISTS `comment` CASCADE;
 CREATE TABLE `comment`( 
 	`msg` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`name` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Wukong',
-	`episode_id` Int( 11 ) UNSIGNED NOT NULL )
+	`episode_id` Int( 11 ) UNSIGNED NOT NULL,
+	`time` Timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 ENGINE = InnoDB;
@@ -116,16 +117,35 @@ AUTO_INCREMENT = 2;
 -- Dump data of "comment" ----------------------------------
 BEGIN;
 
-INSERT INTO `comment`(`msg`,`name`,`episode_id`) VALUES 
-( 'wow keren banget', 'raiz', '129' ),
-( 'wih ngeri', 'aku', '129' ),
-( 'test', 'waw', '129' ),
-( 'ngeri', 'waw', '129' ),
-( 'bisa', 'wakwaw', '129' ),
-( 'nice!', 'wakwaw', '119' ),
-( 'mantap2', 'wew', '119' ),
-( 'ops', 'wew', '119' ),
-( 'kjn', 'wew', '113' );
+INSERT INTO `comment`(`msg`,`name`,`episode_id`,`time`) VALUES 
+( 'wow keren banget', 'raiz', '129', '2021-02-14 12:29:51' ),
+( 'wih ngeri', 'aku', '129', '2021-02-14 12:29:51' ),
+( 'test', 'waw', '129', '2021-02-14 12:29:51' ),
+( 'ngeri', 'waw', '129', '2021-02-14 12:29:51' ),
+( 'bisa', 'wakwaw', '129', '2021-02-14 12:29:51' ),
+( 'nice!', 'wakwaw', '119', '2021-02-14 12:29:51' ),
+( 'mantap2', 'wew', '119', '2021-02-14 12:29:51' ),
+( 'ops', 'wew', '119', '2021-02-14 12:29:51' ),
+( 'kjn', 'wew', '113', '2021-02-14 12:29:51' ),
+( 'bagus
+', 'ilyas', '129', '2021-02-14 12:29:51' ),
+( 'test', 'Anonim', '126', '2021-02-14 12:29:51' ),
+( 'namawe', 'Anonim', '113', '2021-02-14 12:32:52' ),
+( 'awkoakaowkok', 'Anonim', '113', '2021-02-14 12:33:14' ),
+( 'wow', 'Anonim', '113', '2021-02-14 13:05:00' ),
+( 'asa', 'Anonim', '113', '2021-02-14 13:10:35' ),
+( 'asa', 'Anonim', '113', '2021-02-14 13:10:36' ),
+( 'asa', 'Anonim', '113', '2021-02-14 13:10:36' ),
+( 'asajskajs', 'Anonim', '113', '2021-02-14 13:10:48' ),
+( 'asajskajs', 'Anonim', '113', '2021-02-14 13:10:49' ),
+( 'asas', 'Anonim', '113', '2021-02-14 13:10:58' ),
+( 'test', 'Anonim', '113', '2021-02-14 13:12:35' ),
+( 'test', 'Anonim', '113', '2021-02-14 13:14:30' ),
+( 'test', 'Anonim', '113', '2021-02-14 13:15:24' ),
+( 'asa', 'Anonim', '113', '2021-02-14 13:16:20' ),
+( 'asasas', 'Anonim', '113', '2021-02-14 13:17:50' ),
+( 'asasasas', 'Anonim', '113', '2021-02-14 13:18:56' ),
+( 'asasaacsxz', 'Anonim', '113', '2021-02-14 13:19:20' );
 COMMIT;
 -- ---------------------------------------------------------
 
@@ -181,14 +201,14 @@ High school student and prodigy Light Yagami stumbles upon the Death Note and&md
 With this divine capability, Light decides to extinguish all criminals in order to build a new world where crime does not exist and people worship him as a god. Police, however, quickly discover that a serial killer is targeting criminals and, consequently, try to apprehend the culprit. To do this, the Japanese investigators count on the assistance of the best detective in the world: a young and eccentric man known only by the name of L.<br />
 <br />', 'Finished Airing', 'Madhouse', 'Oct 4, 2006 to Jun 27, 2007', '8.63', 'Mystery,Drama,Shounen,Supernatural,Psychological,Mystery,Police,Psychological,Supernatural,Thriller,Shounen', '23 min. per ep.', 'TV', '37', '101', '2021-02-04 12:17:58' ),
 ( '83', 'Non Non Biyori Nonstop', 'https://cdn.myanimelist.net/images/anime/1159/107670.jpg', 'Third season of <i>Non Non Biyori</i>.', 'Currently Airing', 'SILVER LINK', 'Jan 11, 2021 to ?', '8.35', 'Slice of Life,Comedy,Seinen', '24 min. per ep.', 'TV', '12', '101', '2021-02-04 12:17:58' ),
-( '84', 'Log Horizon: Entaku Houkai', 'https://cdn.myanimelist.net/images/anime/1510/108026.jpg', 'Third season of <i>Log Horizon</i>.', 'Currently Airing', 'Studio Deen', 'Jan 13, 2021 to ?', '7.39', 'Action,Game,Adventure,Magic,Fantasy', '24 min. per ep.', 'TV', '12', '108', '2021-02-04 13:27:01' ),
+( '84', 'Log Horizon: Entaku Houkai', 'https://cdn.myanimelist.net/images/anime/1510/108026.jpg', 'Third season of <i>Log Horizon</i>.', 'Currently Airing', 'Studio Deen', 'Jan 13, 2021 to ?', '7.39', 'Action,Game,Adventure,Magic,Fantasy', '24 min. per ep.', 'TV', '12', '112', '2021-02-04 13:27:01' ),
 ( '86', 'One Punch Man 2nd Season', 'https://cdn.myanimelist.net/images/anime/1805/99571.jpg', 'In the wake of defeating Boros and his mighty army, Saitama has returned to his unremarkable everyday life in Z-City. However, unbeknownst to him, the number of monsters appearing is still continuously on the rise, putting a strain on the Hero Association&rsquo;s resources. Their top executives decide on the bold move of recruiting hoodlums in order to help in their battle. But during the first meeting with these potential newcomers, a mysterious man calling himself Garou makes his appearance. Claiming to be a monster, he starts mercilessly attacking the crowd. <br />
 <br />
 The mysterious Garou continues his rampage against the Hero Association, crushing every hero he encounters. He turns out to be the legendary martial artist Silverfang&rsquo;s best former disciple and seems driven by unknown motives. Regardless, this beast of a man seems unstoppable. Intrigued by this puzzling new foe and with an insatiable thirst for money, Saitama decides to seize the opportunity and joins the interesting martial arts competition. <br />
 <br />
 As the tournament commences and Garou continues his rampage, a new great menace reveals itself, threatening the entire human world. Could this finally be the earth-shattering catastrophe predicted by the great seer Madame Shibabawa? <br />
 <br />
-[Written by MAL Rewrite]<br />', 'Finished Airing', 'J.C.Staff', 'Apr 10, 2019 to Jul 3, 2019', '7.41', 'Action,Sci-Fi,Comedy,Parody,Super Power,Supernatural', '23 min. per ep.', 'TV', '12', '113', '2021-02-08 01:01:23' ),
+[Written by MAL Rewrite]<br />', 'Finished Airing', 'J.C.Staff', 'Apr 10, 2019 to Jul 3, 2019', '7.41', 'Action,Sci-Fi,Comedy,Parody,Super Power,Supernatural', '23 min. per ep.', 'TV', '12', '117', '2021-02-08 01:01:23' ),
 ( '87', 'Koe no Katachi', 'https://cdn.myanimelist.net/images/anime/1122/96435.jpg', 'As a wild youth, elementary school student Shouya Ishida sought to beat boredom in the cruelest ways. When the deaf Shouko Nishimiya transfers into his class, Shouya and the rest of his class thoughtlessly bully her for fun. However, when her mother notifies the school, he is singled out and blamed for everything done to her. With Shouko transferring out of the school, Shouya is left at the mercy of his classmates. He is heartlessly ostracized all throughout elementary and middle school, while teachers turn a blind eye.<br />
 <br />
 Now in his third year of high school, Shouya is still plagued by his wrongdoings as a young boy. Sincerely regretting his past actions, he sets out on a journey of redemption: to meet Shouko once more and make amends.<br />
@@ -202,7 +222,7 @@ Not only is he stuck with a useless deity turned party archpriest, the pair also
 <br />
 <i>Kono Subarashii Sekai ni Shukufuku wo! 2</i> continues to follow Kazuma and the rest of his party through countless more adventures as they struggle to earn money and have to deal with one another&#039;s problematic personalities. However, things rarely go as planned, and they are often sidetracked by their own idiotic tendencies.<br />
 <br />
-[Written by MAL Rewrite]', 'Finished Airing', 'Studio Deen', 'Jan 12, 2017 to Mar 16, 2017', '8.32', 'Adventure,Comedy,Parody,Supernatural,Magic,Fantasy', '23 min. per ep.', 'TV', '10', '217', '2021-02-04 12:17:58' ),
+[Written by MAL Rewrite]', 'Finished Airing', 'Studio Deen', 'Jan 12, 2017 to Mar 16, 2017', '8.32', 'Adventure,Comedy,Parody,Supernatural,Magic,Fantasy', '23 min. per ep.', 'TV', '10', '228', '2021-02-04 12:17:58' ),
 ( '89', 'Shingeki no Kyojin', 'https://cdn.myanimelist.net/images/anime/10/47347.jpg', 'Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called titans, forcing humans to hide in fear behind enormous concentric walls. What makes these giants truly terrifying is that their taste for human flesh is not born out of hunger but what appears to be out of pleasure. To ensure their survival, the remnants of humanity began living within defensive barriers, resulting in one hundred years without a single titan encounter. However, that fragile calm is soon shattered when a colossal titan manages to breach the supposedly impregnable outer wall, reigniting the fight for survival against the man-eating abominations.<br />
 <br />
 After witnessing a horrific personal loss at the hands of the invading creatures, Eren Yeager dedicates his life to their eradication by enlisting into the Survey Corps, an elite military unit that combats the merciless humanoids outside the protection of the walls. Based on Hajime Isayama&#039;s award-winning manga, <i>Shingeki no Kyojin</i> follows Eren, along with his adopted sister Mikasa Ackerman and his childhood friend Armin Arlert, as they join the brutal war against the titans and race to discover a way of defeating them before the last walls are breached.<br />
@@ -236,7 +256,7 @@ On another note, Fuutarou slowly begins to realize the existence of a possible c
 ( '101', 'Black Clover (TV)', 'https://cdn.myanimelist.net/images/anime/2/88336.jpg', 'Asta and Yuno were abandoned at the same church on the same day. Raised together as children, they came to know of the  Wizard King â€”a title given to the strongest mage in the kingdomâ€”and promised that they would compete against each other for the position of the next Wizard King. However, as they grew up, the stark difference between them became evident. While Yuno is able to wield magic with amazing power and control, Asta cannot use magic at all and desperately tries to awaken his powers by training physically.<br />
 <br />
 When they reach the age of 15, Yuno is bestowed a spectacular Grimoire with a four-leaf clover, while Asta receives nothing. However, soon after, Yuno is attacked by a person named Lebuty, whose main purpose is to obtain Yuno\'s Grimoire. Asta tries to fight Lebuty, but he is outmatched. Though without hope and on the brink of defeat, he finds the strength to continue when he hears Yuno\'s voice. Unleashing his inner emotions in a rage, Asta receives a five-leaf clover Grimoire, a  Black Clover  giving him enough power to defeat Lebuty. A few days later, the two friends head out into the world, both seeking the same goalâ€”to become the Wizard King!<br />
-<br />', 'Currently Airing', 'Studio Pierrot', 'Oct 3, 2017 to Mar 30, 2021', '7.36', 'Action,Comedy,Magic,Fantasy,Shounen', '23 min. per ep.', 'TV', '170', '5', '2021-02-05 15:06:11' ),
+<br />', 'Currently Airing', 'Studio Pierrot', 'Oct 3, 2017 to Mar 30, 2021', '7.36', 'Action,Comedy,Magic,Fantasy,Shounen', '23 min. per ep.', 'TV', '170', '24', '2021-02-05 15:06:11' ),
 ( '102', 'Nanatsu no Taizai', 'https://cdn.myanimelist.net/images/anime/8/65409.jpg', 'In a world similar to the European Middle Ages, the feared yet revered Holy Knights of Britannia use immensely powerful magic to protect the region of Britannia and its kingdoms. However, a small subset of the Knights supposedly betrayed their homeland and turned their blades against their comrades in an attempt to overthrow the ruler of Liones. They were defeated by the Holy Knights, but rumors continued to persist that these legendary knights, called the &quot;Seven Deadly Sins,&quot; were still alive. Ten years later, the Holy Knights themselves staged a coup d&rsquo;&eacute;tat, and thus became the new, tyrannical rulers of the Kingdom of Liones.<br />
 <br />
 Based on the best-selling manga series of the same name, <i>Nanatsu no Taizai</i> follows the adventures of Elizabeth, the third princess of the Kingdom of Liones, and her search for the Seven Deadly Sins. With their help, she endeavors to not only take back her kingdom from the Holy Knights, but to also seek justice in an unjust world.<br />
@@ -248,7 +268,7 @@ Thankfully, his life is spared due to the girl\'s swift action. Bleeding by the 
 ( '104', 'Horimiya', 'https://cdn.myanimelist.net/images/anime/1791/110336.jpg', 'On the surface, the thought of Kyouko Hori and Izumi Miyamura getting along would be the last thing in people&#039;s minds. After all, Hori has a perfect combination of beauty and brains, while Miyamura appears meek and distant to his fellow classmates. However, a fateful meeting between the two lays both of their hidden selves bare. Even though she is popular at school, Hori has little time to socialize with her friends due to housework. On the other hand, Miyamura lives under the noses of his peers, his body bearing secret tattoos and piercings that make him look like a gentle delinquent.<br />
 <br />
 Having opposite personalities yet sharing odd similarities, the two quickly become friends and often spend time together in Hori&#039;s home. As they both emerge from their shells, they share with each other a side of themselves concealed from the outside world.<br />
-<br />', 'Currently Airing', 'CloverWorks', 'Jan 10, 2021 to ?', '8.56', 'Slice of Life,Comedy,Romance,School,Shounen', '23 min. per ep.', 'TV', '13', '27', '2021-02-08 12:50:37' ),
+<br />', 'Currently Airing', 'CloverWorks', 'Jan 10, 2021 to ?', '8.56', 'Slice of Life,Comedy,Romance,School,Shounen', '23 min. per ep.', 'TV', '13', '51', '2021-02-08 12:50:37' ),
 ( '105', 'Dr. Stone: Stone Wars', 'https://cdn.myanimelist.net/images/anime/1711/110614.jpg', 'Senkuu has made it his goal to bring back two million years of human achievement and revive the entirety of those turned to statues. However, one man stands in his way: Tsukasa Shishiou, who believes that only the fittest of those petrified should be revived.<br>
 <br>
 As the snow melts and spring approaches, Senkuu and his allies in Ishigami Village finish the preparations for their attack on the Tsukasa Empire. With a reinvented cell phone model now at their disposal, the Kingdom of Science is ready to launch its newest scheme to recruit the sizable numbers of Tsukasa\'s army to their side. However, it is a race against time; for every day the Kingdom of Science spends perfecting their inventions, the empire rapidly grows in number.<br>

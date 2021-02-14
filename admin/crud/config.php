@@ -504,9 +504,10 @@ function allanime($key, $sql)
 function comment($nama, $msg, $id_eps)
 {
   global $con;
+  $time = date('Y-m-d H:i:s');
 
-  $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`episode_id`)
-                            VALUES ("' . $nama . '","' . $msg . '",' . $id_eps . ')');
+  $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`episode_id`,`time`)
+                            VALUES ("' . $nama . '","' . $msg . '",' . $id_eps . ',"' . $time . '")');
   if ($sql) {
     return true;
   }
@@ -583,12 +584,13 @@ function getRecentWatch($recentWatch)
   return $tampung;
 }
 
-function lastWatch($judul,$episode){
+function lastWatch($judul, $episode)
+{
   $last = $_COOKIE['last'][$judul];
-  if(empty($last)){
+  if (empty($last)) {
     setcookie("last[$judul]", "$episode,");
-  }else {
-    $get = explode(',',$last);
+  } else {
+    $get = explode(',', $last);
     $cek = false;
     foreach ($get as $value) {
       if ($value == $episode) {
@@ -596,19 +598,56 @@ function lastWatch($judul,$episode){
       }
     }
     if ($cek == false) {
-      $set = $last.$episode.',';
+      $set = $last . $episode . ',';
       setcookie("last[$judul]", "$set");
     }
   }
 }
 
-function cekLastWatch($judul,$episode){
+function cekLastWatch($judul, $episode)
+{
   $last = $_COOKIE['last'][$judul];
-  $last = explode(',',$last);
+  $last = explode(',', $last);
   foreach ($last as $value) {
-    if($value == $episode){
+    if ($value == $episode) {
       return 'text-primary';
     }
   }
   return;
+}
+
+function timeComment($time)
+{
+  $time         = strtotime($time);
+  $seconds      = round(time() - $time);
+  $minute       = round($seconds / 60);
+  $hours        = round($seconds / 3600);       //value 3600 is 60 minutes * 60 sec  
+  $days         = round($seconds / 86400);      //86400 = 24 * 60 * 60;  
+  $weeks        = round($seconds / 604800);     // 7*24*60*60;  
+  $months       = round($seconds / 2629440);    //((365+365+365+365+366)/5/12)*24*60*60  
+  $years        = round($seconds / 31553280);
+
+  switch ($seconds) {
+    case $seconds < 60:
+      return $seconds.' seconds ago';
+      break;
+    case $minute < 60:
+      return $minute.' menit ago';
+      break;
+    case $hours < 24:
+      return $hours.' hours ago';
+      break;
+    case $days < 7:
+      return $days.' days ago';
+      break;
+    case $weeks < 4.3:
+      return $weeks.' week ago';
+      break;
+    case $months < 12:
+      return $months.' months ago';
+      break;
+    default:
+      return $years.' years ago';
+      break;
+  }
 }

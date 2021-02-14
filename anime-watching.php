@@ -20,9 +20,9 @@ $random   = rand(0, mysqli_num_rows($result) - 5);
 $result   = mysqli_query($con, "SELECT * FROM `movies` LIMIT $random,5");
 $result   = anime($result);
 $listeps  = getEps($detail['judul']);
-$comment  = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . $id . '');
+$comment  = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . $id . ' ORDER BY `time` DESC');
 
-lastWatch($id_movie,$detail['id']);
+lastWatch($id_movie, $detail['id']);
 recentWatch($id_movie);
 // print_r($_COOKIE['lastWatch']);
 ?>
@@ -104,7 +104,17 @@ recentWatch($id_movie);
           </div>
           <div class="row">
             <div class="col-lg-8">
-              <div class="anime__details__review">
+            <div class="anime__details__form">
+                <div class="section-title">
+                  <h5>your comments</h5>
+                </div>
+                <form action="#">
+                  <input id="name" class="form-control" placeholder="Name" value="<?php echo $_COOKIE['name_comment'] ?>" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
+                  <textarea id="msg" style="color: #495057;" placeholder="Comment"></textarea>
+                  <button type="button" class="btn_comment float-right"><i class="fa fa-location-arrow"></i> Review</button>
+                </form>
+              </div>
+              <div class="anime__details__review" style="margin-top: 55px;">
                 <div class="section-title">
                   <h5>Reviews</h5>
                 </div>
@@ -119,7 +129,7 @@ recentWatch($id_movie);
                     ?>
                       <div class="anime__review__item child">
                         <div class="anime__review__item__text">
-                          <h6><?php echo $b['name']; ?> - <span>1 Hour ago</span></h6>
+                          <h6><?php echo $b['name']; ?> - <span><?php echo timeComment($b['time']) ?></span></h6>
                           <p><?php echo $b['msg']; ?></p>
                         </div>
                       </div>
@@ -128,16 +138,6 @@ recentWatch($id_movie);
                   }
                   ?>
                 </div>
-              </div>
-              <div class="anime__details__form">
-                <div class="section-title">
-                  <h5>your comments</h5>
-                </div>
-                <form action="#">
-                  <input id="name" class="form-control" placeholder="Name" value="<?php echo $_COOKIE['name_comment']?>" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
-                  <textarea id="msg" style="color: #495057;" placeholder="Comment"></textarea>
-                  <button type="button" class="btn_comment"><i class="fa fa-location-arrow"></i> Review</button>
-                </form>
               </div>
             </div>
           </div>
@@ -196,8 +196,8 @@ recentWatch($id_movie);
           },
           dataType: 'json',
           success: function(data) {
-            document.cookie = "name_comment="+name;
-            $('#commentlist').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 Hour ago</span></h6><p>" + msg + "</p></div></div>");
+            document.cookie = "name_comment=" + name;
+            $('#commentlist').prepend("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 seconds ago</span></h6><p>" + msg + "</p></div></div>");
             $('#name').val(getCookie('name_comment'));
             $('#msg').val("");
             $('.first_comment').remove();
