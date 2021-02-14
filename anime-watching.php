@@ -10,16 +10,21 @@ $detail = mysqli_fetch_array($detail);
 $result = mysqli_query($con, "SELECT * FROM `movies`");
 foreach ($result as $anime) {
   if ($anime['judul'] == $detail['judul']) {
-    $detailAnime = $anime;
+    $detailAnime  = $anime;
+    $id_movie     = $anime['id'];
     break;
   }
 }
 
-$random = rand(0, mysqli_num_rows($result) - 5);
-$result = mysqli_query($con, "SELECT * FROM `movies` LIMIT $random,5");
-$result = anime($result);
-$listeps = getEps($detail['judul']);
-$comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . $id . '');
+$random   = rand(0, mysqli_num_rows($result) - 5);
+$result   = mysqli_query($con, "SELECT * FROM `movies` LIMIT $random,5");
+$result   = anime($result);
+$listeps  = getEps($detail['judul']);
+$comment  = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . $id . '');
+
+lastWatch($id_movie,$detail['id']);
+recentWatch($id_movie);
+// print_r($_COOKIE['lastWatch']);
 ?>
 
 <body>
@@ -171,30 +176,6 @@ $comment = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' . 
 <script>
   $(document).ready(function() {
     var comment = JSON.parse('<?php echo json_encode($arr) ?>');
-    // setInterval(function() {
-    //   // $('#commentlist').children('.child').remove();
-    //   var id_episode = $('#episode_id').text();
-    //   $.ajax({
-    //     url: 'admin/crud/realtime.php',
-    //     method: 'POST',
-    //     data: {
-    //       id: id_episode,
-    //       comment: comment
-    //     },
-    //     dataType: 'json',
-    //     success: function(data) {
-    //       console.log(data);
-    //       if (data != null) {
-    //         $.each(data, function(key, value) {
-    //           $('#commentlist').append("<div class='anime__review__item child'><div class='anime__review__item__text'><h6>" + value['name'] + " - <span>1 Hour ago</span></h6><p>" + value['msg'] + "</p></div></div>");
-    //         });
-    //       }
-    //       // $('#commentlist').append("<div class='anime__review__item'><div class='anime__review__item__text'><h6>" + name + " - <span>1 Hour ago</span></h6><p>" + msg + "</p></div></div>");
-    //       // $('#name').val("");
-    //       // $('#msg').val("");
-    //     }
-    //   });
-    // }, 5000);
 
     $('.btn_comment').on('click', function(event) {
       var name = $('#name').val();

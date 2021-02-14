@@ -506,18 +506,8 @@ function comment($nama, $msg, $id_eps)
   global $con;
 
   $sql        = mysqli_query($con, 'INSERT INTO `comment` (`name`,`msg`,`episode_id`)
-                            VALUES ("' . $nama . '","' . $msg . '",'.$id_eps.')');
-
-  // $getComment = mysqli_query($con, 'SELECT `name`,`msg` FROM `comment` WHERE `movies_id` = ' . $id . '');
-  // $a = [
-  //   'nama' => $nama,
-  //   'msg' => $msg,
-  //   'id' => $id,
-  // ];
+                            VALUES ("' . $nama . '","' . $msg . '",' . $id_eps . ')');
   if ($sql) {
-    // foreach ($getComment as $value) {
-    //   array_push($a, $value);
-    // }
     return true;
   }
   return false;
@@ -541,9 +531,84 @@ function viewBookmark($dataAnime, $listBookmark)
   foreach ($dataAnime as $b) {
     foreach ($listBookmark as $c) {
       if ($b['id'] == $c) {
-        array_push($a,$b);
+        array_push($a, $b);
       }
     }
   }
   return $a;
+}
+
+function recentWatch($newWatch)
+{
+  $listWatch = $_COOKIE['recentWatch'];
+  $arr       = [];
+  $listWatch = explode(',', $listWatch);
+  foreach ($listWatch as $value) {
+    if (!empty($value)) {
+      array_push($arr, $value);
+    }
+    if ($value == $newWatch) {
+      return false;
+    }
+  }
+
+  if (count($listWatch) > 4) {
+    array_shift($arr);
+  }
+  array_push($arr, $newWatch);
+
+  $recentWatch = '';
+  foreach ($arr as $value) {
+    if (!empty($value)) {
+      $recentWatch = $recentWatch . $value . ',';
+    }
+  }
+  setcookie('recentWatch', $recentWatch);
+}
+
+function getRecentWatch($recentWatch)
+{
+  global $con;
+  $movies = mysqli_query($con, 'SELECT * FROM `movies`');
+
+  $recentWatch = explode(',', $recentWatch);
+  $tampung     = [];
+  foreach ($recentWatch as $value) {
+    foreach ($movies as $value2) {
+      if ($value == $value2['id']) {
+        array_push($tampung, $value2);
+      }
+    }
+  }
+  return $tampung;
+}
+
+function lastWatch($judul,$episode){
+  $last = $_COOKIE['last'][$judul];
+  if(empty($last)){
+    setcookie("last[$judul]", "$episode,");
+  }else {
+    $get = explode(',',$last);
+    $cek = false;
+    foreach ($get as $value) {
+      if ($value == $episode) {
+        $cek = true;
+      }
+    }
+    if ($cek == false) {
+      $set = $last.$episode.',';
+      setcookie("last[$judul]", "$set");
+    }
+  }
+}
+
+function cekLastWatch($judul,$episode){
+  $last = $_COOKIE['last'][$judul];
+  $last = explode(',',$last);
+  foreach ($last as $value) {
+    if($value == $episode){
+      return 'text-primary';
+    }
+  }
+  return;
 }

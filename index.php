@@ -17,7 +17,7 @@ include 'tamplate/header.php';
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="btn__all">
-                  <a href="viewall.php?current=ongoing" class="primary-btn">View All <span class="arrow_right"></span></a>
+                  <a href="viewall.php?current=ongoing" class="primary-btn">View  <span class="arrow_right"></span></a>
                 </div>
               </div>
             </div>
