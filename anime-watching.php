@@ -53,7 +53,7 @@ recentWatch($id_movie);
               <?php
               foreach ($listeps as $row) {
               ?>
-                <a style="margin-right: 5px; margin-bottom: 10px;" href="anime-watching.php?id= <?php echo $row['id'] ?>"><?php echo $row['episode'] ?></a>
+                <a style="margin-right: 5px; margin-bottom: 10px; font-weight: bold;" class="btn_eps btn <?php echo cekLastWatch($id_movie,$row['id']) ?>" href="anime-watching.php?id= <?php echo $row['id'] ?>"><?php echo $row['episode'] ?></a>
               <?php
               }
               ?>
