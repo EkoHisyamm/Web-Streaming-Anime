@@ -9,7 +9,7 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-8" style="max-width: 52%;">
                 <div class="header__nav">
                     <nav class="header__menu mobile-menu">
                         <ul>
@@ -22,7 +22,7 @@
                     </nav>
                 </div>
             </div>
-            <div class="navbar__search">
+            <div class="navbar__search" style="width: 20%;">
                 <div class="header__right">
                     <form class="form-inline ml-3" action="viewallq.php" method="GET">
                         <div class="input-group input-group-sm">
