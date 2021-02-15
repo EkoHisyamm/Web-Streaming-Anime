@@ -163,7 +163,6 @@
         url: "crud/delete.php",
         data : {idDel : id, showdata : val},
         success: function(data){;
-          console.log(data);
           $('#deletemodal').modal('hide');
           $('#listmovies').html(data);
         }

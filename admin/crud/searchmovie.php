@@ -15,6 +15,11 @@
 				$sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
 				array_push($th, 'judul', 'episode');
 				break;
+
+			case 'genre':
+				$sql = mysqli_query($con, 'SELECT `nama`,`info` FROM `genre` WHERE `nama` LIKE "%' . $_POST['search'] . '%"');
+				array_push($th, 'nama', 'info');
+				break;
 		}
 
 		while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {

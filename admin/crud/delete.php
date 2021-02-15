@@ -8,7 +8,7 @@
 	switch ($current) {
 		case 'movie':
 		mysqli_query($con, 'DELETE FROM `movies` WHERE `id`='.$_POST['idDel'].' ');
-		array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
+		array_push($th, 'judul', 'durasi', 'rate','rilis','type','studio','status');
 		$sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`, `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC');
 		break;
 
