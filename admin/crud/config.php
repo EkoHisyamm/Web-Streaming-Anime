@@ -91,21 +91,6 @@ function addepisode()
   }
 }
 
-function addgenre()
-{
-  global $con;
-  $name = ucfirst($_POST['name']);
-  $info = ucfirst($_POST['info']);
-  $sql  = 'INSERT INTO `genre` (`nama`,`info`) 
-                                VALUES ("' . $name . '", "' . $info . '")';
-  if (mysqli_query($con, $sql)) {
-    header('Location: genre.php');
-  } else {
-    header('Location: ');
-  }
-}
-
-
 function editmovie($id, $current, $pages, $q = "")
 {
   global $con;
@@ -122,18 +107,18 @@ function editmovie($id, $current, $pages, $q = "")
   $gambar   = $_POST['gambar'];
 
   $sql = mysqli_query($con, 'UPDATE `movies` SET
-`judul`     = "' . $judul . '",
-`gambar`    = "' . $gambar . '",
-`episode`   = "' . $episode . '",
-`status`    = "' . $status . '",
-`studio`    = "' . $studio . '",
-`rilis`     = "' . $rilis . '",
-`rate`      = "' . $rate . '",
-`genre`     = "' . $genre . '",
-`durasi`    = "' . $durasi . '",
-`type`      = "' . $type . '",
-`sinopsis`  = "' . $sinopsis . '"
- WHERE `id` = "' . $id . '"');
+  `judul`     = "' . $judul . '",
+  `gambar`    = "' . $gambar . '",
+  `episode`   = "' . $episode . '",
+  `status`    = "' . $status . '",
+  `studio`    = "' . $studio . '",
+  `rilis`     = "' . $rilis . '",
+  `rate`      = "' . $rate . '",
+  `genre`     = "' . $genre . '",
+  `durasi`    = "' . $durasi . '",
+  `type`      = "' . $type . '",
+  `sinopsis`  = "' . $sinopsis . '"
+   WHERE `id` = "' . $id . '"');
   if ($sql) {
     if (!empty($q)) {
       header('Location: listmovieq.php?current=' . $current . '&pages=' . $pages . '&q=' . $q);
@@ -163,46 +148,6 @@ function editepisode($id, $current, $pages, $q = "")
     }
   } else {
     header('Location: editepisode.php');
-  }
-}
-
-function editgenre($id)
-{
-  global $con;
-  $nama    = ucfirst($_POST['name']);
-  $info    = $_POST['info'];
-
-  $sql = "UPDATE `genre` SET `nama`='" . $nama . "', `info`='" . $info . "'  WHERE `id` = '" . $id . "' ";
-  if (mysqli_query($con, $sql)) {
-    header('Location: ');
-  } else {
-    header('Location: ');
-  }
-}
-
-function delete($id, $type)
-{
-  global $con;
-  if ($type == 'episode') {
-    $sql = mysqli_query($con, 'DELETE FROM `episode` WHERE `id` = "' . $id . '"');
-  } else {
-    $sql = mysqli_query($con, 'DELETE FROM `movies` WHERE `id` = "' . $id . '"');
-  }
-  if ($sql) {
-    header(header('Location: '));
-  } else {
-    die('gagal hapus');
-  }
-}
-
-function deletegenre($id)
-{
-  global $con;
-  $sql = mysqli_query($con, 'DELETE FROM `genre` WHERE `id` = "' . $id . '"');
-  if ($sql) {
-    header('Location: ');
-  } else {
-    die('gagal hapus');
   }
 }
 
