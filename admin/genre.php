@@ -1,50 +1,50 @@
 <?php
-  require 'crud/config.php';
-  include 'tamplate/header.php';
+require 'crud/config.php';
+include 'tamplate/header.php';
 
-  $limit = 10;
+$limit = 10;
 
-  $active = "active";
-  $genres = 'genre';
-  $pages = 1;
-  $th = [];
-  $q = $_GET['q'];
+$active = "active";
+$genres = 'genre';
+$pages = 1;
+$th = [];
+$q = $_GET['q'];
 
-  if (isset($_GET['pages'])) {
-    $pages = $_GET['pages'];
+if (isset($_GET['pages'])) {
+  $pages = $_GET['pages'];
+}
+
+if ($pages == 0){
+  header('Location: genre.php');
+  die();
+}
+
+$sql = mysqli_query($con, 'SELECT * FROM `genre` ORDER BY `nama`');
+array_push($th, 'nama', 'info');
+
+while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
+  $result[] = $a;
+}
+
+$lenght = mysqli_num_rows($sql);
+$result = limitSql($sql, $pages, $limit);
+
+if(empty($result)){
+  $pages = ceil($lenght/$limit);
+  if(!empty($q)){
+    $pages = $pages.'&q='.$q;
   }
+  header('Location: ?pages='.$pages);
+}
 
-  if ($pages == 0){
-    header('Location: genre.php');
-    die();
-  }
-
-  $sql = mysqli_query($con, 'SELECT * FROM `genre` ORDER BY `nama`');
-  array_push($th, 'nama', 'info');
-
-  while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
-    $result[] = $a;
-  }
-
-  $lenght = mysqli_num_rows($sql);
-  $result = limitSql($sql, $pages, $limit);
-
-  if(empty($result)){
-    $pages = ceil($lenght/$limit);
-    if(!empty($q)){
-      $pages = $pages.'&q='.$q;
-    }
-    header('Location: ?pages='.$pages);
-  }
-
-  $arr = selectPage($pages, $lenght, $limit);
+$arr = selectPage($pages, $lenght, $limit);
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
     <?php
-      include 'tamplate/navbar.php';
-      include 'tamplate/sidebar.php';
+    include 'tamplate/navbar.php';
+    include 'tamplate/sidebar.php';
     ?>
     <div class="content-wrapper">
       <!-- Content Wrapper. Contains page content -->
@@ -87,7 +87,7 @@
                         <?php
                         foreach ($th as $a) {
                           ?>
-                            <th><?php echo $a ?></th>
+                          <th><?php echo $a ?></th>
                           <?php
                         }
                         ?>
@@ -158,7 +158,7 @@
                               </div>
                               <div class="form-group">
                                 <label for="descBanner" class="text-primary">Deskripsi:</label><br>
-                                <textarea class="form-control" rows="3" id="descBanner" placeholder="isi deskrisi..."></textarea>
+                                <textarea class="form-control" rows="3" id="descEdit" placeholder="isi deskrisi..."></textarea>
                               </div>
                             </div>
                             <div class="modal-footer">
@@ -220,8 +220,8 @@
     $('#search').on('keyup', function() {
       $.ajax({
         method: "POST",
-        url:    "crud/searchmovie.php",
-        data: { search : $(this).val(), different : val },
+        url: "crud/genreManager.php",
+        data: {genreTask : 'search', search : $(this).val()},
         success: function(data){
           $('#genrelist').html(data);
         }
@@ -248,23 +248,23 @@
     $('.edit').click(function() {
       datas = $(this).data("id");
       datas = datas.split(",");
-
       $('#namaEdit').val(datas[1]);
-      $('#descBanner').val(datas[2]);
-      var id   = datas[0];
-      var name = datas[1];
-      var desk = datas[2];
+      $('#descEdit').val(datas[2]);
+    });
 
-      $('#saveEdit').click(function() {
-        $.ajax({
-          method : 'POST',
-          url: "crud/genreManager.php",
-          data : {genreTask : 'saveEdit', nameGenre : name, idGenre : id, infoGenre : desk},
-          success: function(data) {
-            $('#editmodal').modal('hide');
-            $('#genrelist').html(data);
-          }
-        });
+    $('#saveEdit').click(function() {
+      nama = $('#namaEdit').val();
+      desc = $('#descEdit').val();
+
+      $.ajax({
+        method : 'POST',
+        url: "crud/genreManager.php",
+        data : {genreTask : 'edits', nameGenre : nama, idGenre : datas[0], infoGenre : desc},
+        success: function(data) {
+          $('#editmodal').modal('hide');
+          $('#genrelist').html(data);
+          $('#namaEdit').val();
+        }
       });
     });
   })

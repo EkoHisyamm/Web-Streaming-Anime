@@ -7,21 +7,28 @@
 	$current = $_POST['genreTask'];
 
 	switch ($current) {
+		case 'edits':
+		$query 	= 'UPDATE `genre` SET `nama`="'.ucfirst($_POST['nameGenre']).'", `info`="'.$_POST['infoGenre'].'" WHERE `id`='.$_POST['idGenre'].' ';
+		mysqli_query($con, $query);
+		$sql = mysqli_query($con, 'SELECT `nama`,`id`,`info` FROM `genre` ORDER BY `id` DESC');
+		break;
+		
 		case 'delete':
 		mysqli_query($con, 'DELETE FROM `genre` WHERE `id`='.$_POST['idDel'].' ');
-		break;
-
-		case 'saveEdit':
-		mysqli_query($con, 'UPDATE `genre` SET `nama`="'.$_POST['nameGenre'].'" WHERE `id`='.$_POST['idGenre'].' ');
+		$sql = mysqli_query($con, 'SELECT `nama`,`id`,`info` FROM `genre` ORDER BY `id` DESC');
 		break;
 
 		case 'add':
 		mysqli_query($con, 'INSERT INTO `genre` (`nama`,`info`) VALUES ("' . ucfirst($_POST['name']) . '", "' . ucfirst($_POST['desc']) . '")');
+		$sql = mysqli_query($con, 'SELECT `nama`,`id`,`info` FROM `genre` ORDER BY `id` DESC');
+		break;
+
+		case 'search':
+		$sql = mysqli_query($con, 'SELECT `nama`,`info` FROM `genre` WHERE `nama` LIKE "%' . $_POST['search'] . '%"');	
 		break;
 	}
 
 	array_push($th, 'nama', 'info');
-	$sql = mysqli_query($con, 'SELECT `nama`,`id`,`info` FROM `genre` ORDER BY `id` DESC');
 
 	$pages = 1;
 	$lenght = mysqli_num_rows($sql);
@@ -54,7 +61,7 @@
 					}
 					?>
 					<td>
-						<a href="#editmodal" name="edit" data-id="<?php echo $temp ?>" title='Update Record' data-toggle='modal' class="edit"> <span class='fas fa-edit'></span></a>
+						<a href="#editmodal" name="edit" data-id="<?php echo $temp; ?>" title='Update Record' data-toggle='modal' class="edit"> <span class='fas fa-edit'></span></a>
 						<a href="#deletemodal" class="delete" data-id="<?php echo $row['id'] ?>" title='Delete Record' data-toggle='modal'> <span class='fas fa-trash-alt'></span></a>
 					</td>
 				</tr>
@@ -104,7 +111,7 @@
 							</div>
 							<div class="form-group">
 								<label for="descBanner" class="text-primary">Deskripsi:</label><br>
-								<textarea class="form-control" rows="3" id="descBanner" placeholder="isi deskrisi..."></textarea>
+								<textarea class="form-control" rows="3" id="descEdit" placeholder="isi deskrisi..."></textarea>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -145,20 +152,20 @@
 
       $('#namaEdit').val(datas[0]);
       $('#descBanner').val(datas[2]);
-      var id   = datas[0];
-      var name = datas[1];
-      var desk = datas[2];
+    });
 
-      $('#saveEdit').click(function() {
-        $.ajax({
-          method : 'POST',
-          url: "crud/genreManager.php",
-          data : {genreTask : 'saveEdit', nameGenre : name, idGenre : id, infoGenre : desk},
-          success: function(data) {
-            $('#editmodal').modal('hide');
-            $('#genrelist').html(data);
-          }
-        });
+    $('#saveEdit').click(function() {
+    	nama = $('#namaEdit').val();
+      desc = $('#descEdit').val();
+
+      $.ajax({
+        method : 'POST',
+        url: "crud/genreManager.php",
+        data : {genreTask : 'edits', nameGenre : nama, idGenre : datas[1], infoGenre : desc},
+        success: function(data) {
+          $('#editmodal').modal('hide');
+          $('#genrelist').html(data);
+        }
       });
     });
 	})
