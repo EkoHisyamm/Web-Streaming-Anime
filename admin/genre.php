@@ -19,7 +19,7 @@ if ($pages == 0){
   die();
 }
 
-$sql = mysqli_query($con, 'SELECT * FROM `genre` ORDER BY `nama`');
+$sql = mysqli_query($con, 'SELECT * FROM `genre` ORDER BY `id` DESC');
 array_push($th, 'nama', 'info');
 
 while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
@@ -109,37 +109,12 @@ $arr = selectPage($pages, $lenght, $limit);
                           ?>
                           <td>
                             <a href="#editmodal" name="edit" data-id="<?php echo $temp ?>" title='Update Record' data-toggle='modal' class="edit"> <span class='fas fa-edit'></span></a>
-                            <a href="#deletemodal" class="delete" data-id="<?php echo $row['id'] ?>" title='Delete Record' data-toggle='modal'> <span class='fas fa-trash-alt'></span></a>
+                            <a href="#" class="delete" data-id="<?php echo $row['id'] ?>" title='Delete Record' data-toggle='modal'> <span class='fas fa-trash-alt'></span></a>
                           </td>
                         </tr>
                         <?php
                       }
                       ?>
-
-                      <!-- MODAL DELETE -->
-                      <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="delete">Delete Data</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body" style="padding: 0;">
-                              <input type="hidden" class="id" name="id" id="id" />
-                              <div class="card-body">
-                                <div class="form-group">
-                                  <p for="Confirm">data yang telah dihapus tidak dapat di kembalikan</p>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button id="deleteModal" type="button" class="btn btn-danger">Delete</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
                       <!-- MODAL EDIT -->
                       <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -186,8 +161,7 @@ $arr = selectPage($pages, $lenght, $limit);
   $(document).ready(function() {
     var count = <?php echo $lenght ?>;
     var limit = <?php echo $limit ?>;
-    var id, data;
-    var val = "<?php echo "$genres" ?>";
+    var data;
 
     if (count > limit) {
       $('.pages').append("<li><a href='?pages=<?php echo limitPage($pages, $lenght, $limit, 'left') ?>'class='page-link'>&laquo;</a></li>");
@@ -210,10 +184,14 @@ $arr = selectPage($pages, $lenght, $limit);
           data   : {genreTask : 'add', name : nama, desc : info},
           success: function(data){
             $('#genrelist').html(data);
+            swal("Nice, Berhasil Terhapus!", {
+              icon: "success",
+            });
+            $('#nama').val(""); $('#info').val("");
           }
         });
       } else {
-        alert('gagal');
+        swal("Isi Nama Terlebih Dahulu!");
       }
     })
 
@@ -229,18 +207,29 @@ $arr = selectPage($pages, $lenght, $limit);
     });
 
     $(".delete").click(function() {
-      id = $(this).data("id");
-    });
-
-    $("#deleteModal").click(function() {
-      console.log(id);
-      $.ajax({
-        method: "POST",
-        url: "crud/genreManager.php",
-        data : {genreTask : 'delete' , idDel : id, showdata : val},
-        success: function(data){;
-          $('#deletemodal').modal('hide');
-          $('#genrelist').html(data);
+      var id = $(this).data("id");
+      swal({
+        title: "Beneran mau hapus?",
+        text: "Sekali lu hapus, kagak bisa di backup lho!!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Nice, Berhasil Terhapus!", {
+            icon: "success",
+          });
+          $.ajax({
+            method: "POST",
+            url: "crud/genreManager.php",
+            data : {idDel : id, genreTask : 'delete'},
+            success: function(data){;
+              $('#genrelist').html(data);
+            }
+          });
+        } else {
+          swal("Pikirkan dengan baik sebelum menghapus!");
         }
       });
     });
@@ -256,14 +245,28 @@ $arr = selectPage($pages, $lenght, $limit);
       nama = $('#namaEdit').val();
       desc = $('#descEdit').val();
 
-      $.ajax({
-        method : 'POST',
-        url: "crud/genreManager.php",
-        data : {genreTask : 'edits', nameGenre : nama, idGenre : datas[0], infoGenre : desc},
-        success: function(data) {
-          $('#editmodal').modal('hide');
-          $('#genrelist').html(data);
-          $('#namaEdit').val();
+      swal({
+        title: "Beneran mau Edit?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Nice, Berhasil Mengedit!", {
+            icon: "success",
+          });
+          $.ajax({
+            method : 'POST',
+            url: "crud/genreManager.php",
+            data : {genreTask : 'edits', nameGenre : nama, idGenre : datas[0], infoGenre : desc},
+            success: function(data) {
+              $('#editmodal').modal('hide');
+              $('#genrelist').html(data);
+            }
+          });
+        } else {
+          swal("Pikirkan dengan baik sebelum menghapus!");
         }
       });
     });

@@ -112,15 +112,33 @@
 		});
 
 		var val = "<?php echo "$current" ?>";
-		$("#deleteModal").click(function() {
-			$.ajax({
-				url: "crud/delete.php",
-				method: "POST",
-				data : {idDel : id, showdata : val},
-				success: function(data){;
-					$('#listmovies').html(data);
-				}
-			});
-		});
+		$(".delete").click(function() {
+      var id = $(this).data("id");
+      swal({
+        title: "Beneran mau hapus?",
+        text: "Sekali lu hapus, kagak bisa di backup lho!!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Nice, Berhasil Terhapus!", {
+            icon: "success",
+          });
+          $.ajax({
+            method: "POST",
+            url: "crud/delete.php",
+            data : {idDel : id, showdata : val},
+            success: function(data){;
+              $('#deletemodal').modal('hide');
+              $('#listmovies').html(data);
+            }
+          });
+        } else {
+          swal("Pikirkan dengan baik sebelum menghapus!");
+        }
+      });
+    });
 	});
 </script>

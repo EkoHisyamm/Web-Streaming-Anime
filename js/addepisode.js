@@ -35,8 +35,13 @@ $(document).ready(function() {
     });
     if (a == 0 && $('.msg').text() == "" && $('.msg2').text() == "") {
       $('.btn-submit').attr('type', 'submit');
+      swal("Nice, Berhasil Mengupload!", {
+        icon: "success",
+      });
     } else {
-      $('.warning').text('isi semua data dan pastikan series tersedia dan belum ada');
+      swal("isi semua data dan pastikan series tersedia dan belum ada!", {
+        icon: "error",
+      });
     }
   })
 

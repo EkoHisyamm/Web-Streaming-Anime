@@ -62,7 +62,7 @@
 					?>
 					<td>
 						<a href="#editmodal" name="edit" data-id="<?php echo $temp; ?>" title='Update Record' data-toggle='modal' class="edit"> <span class='fas fa-edit'></span></a>
-						<a href="#deletemodal" class="delete" data-id="<?php echo $row['id'] ?>" title='Delete Record' data-toggle='modal'> <span class='fas fa-trash-alt'></span></a>
+						<a href="#" class="delete" data-id="<?php echo $row['id'] ?>" title='Delete Record' > <span class='fas fa-trash-alt'></span></a>
 					</td>
 				</tr>
 				<?php
@@ -126,22 +126,30 @@
 
 <script>
 	$(document).ready(function() {
-		var val = "<?php echo "$genres" ?>";
-
-
 		$(".delete").click(function() {
-      id = $(this).data("id");
-    });
-
-    $("#deleteModal").click(function() {
-      console.log(id);
-      $.ajax({
-        method: "POST",
-        url: "crud/genreManager.php",
-        data : {genreTask : 'delete' , idDel : id, showdata : val},
-        success: function(data){;
-          $('#deletemodal').modal('hide');
-          $('#genrelist').html(data);
+      var id = $(this).data("id");
+      swal({
+        title: "Beneran mau hapus?",
+        text: "Sekali lu hapus, kagak bisa di backup lho!!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Nice, Berhasil Terhapus!", {
+            icon: "success",
+          });
+          $.ajax({
+            method: "POST",
+            url: "crud/genreManager.php",
+            data : {idDel : id, genreTask : 'delete'},
+            success: function(data){;
+              $('#genrelist').html(data);
+            }
+          });
+        } else {
+          swal("Pikirkan dengan baik sebelum menghapus!");
         }
       });
     });
@@ -155,16 +163,31 @@
     });
 
     $('#saveEdit').click(function() {
-    	nama = $('#namaEdit').val();
+      nama = $('#namaEdit').val();
       desc = $('#descEdit').val();
 
-      $.ajax({
-        method : 'POST',
-        url: "crud/genreManager.php",
-        data : {genreTask : 'edits', nameGenre : nama, idGenre : datas[1], infoGenre : desc},
-        success: function(data) {
-          $('#editmodal').modal('hide');
-          $('#genrelist').html(data);
+      swal({
+        title: "Beneran mau Edit?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Nice, Berhasil Mengedit!", {
+            icon: "success",
+          });
+          $.ajax({
+            method : 'POST',
+            url: "crud/genreManager.php",
+            data : {genreTask : 'edits', nameGenre : nama, idGenre : datas[1], infoGenre : desc},
+            success: function(data) {
+              $('#editmodal').modal('hide');
+              $('#genrelist').html(data);
+            }
+          });
+        } else {
+          swal("Pikirkan dengan baik sebelum menghapus!");
         }
       });
     });
