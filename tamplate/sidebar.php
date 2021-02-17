@@ -8,7 +8,7 @@
       $topview = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`,
       `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `views` DESC LIMIT 3');
       $a = 0;
-      if (mysqli_num_rows($topview)) {
+      if (mysqli_num_rows($topview) > 0) {
         foreach ($topview as $row) {
           if ($a >= 3) {
             break;
@@ -51,7 +51,7 @@
       <h5>Recent Watch</h5>
     </div>
     <?php
-    $recent = getRecentWatch($_COOKIE['recentWatch']);
+    $recent = isset($_COOKIE['recentWatch'])? getRecentWatch($_COOKIE['recentWatch']) : array();
     if (count($recent) == 0) {
     ?>
       <p style="color: white;" class="first_comment">Anda belum pernah melihat apapun</p>
