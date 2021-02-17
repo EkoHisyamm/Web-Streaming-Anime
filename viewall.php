@@ -4,7 +4,7 @@ include 'tamplate/header.php';
 
 $current = $_GET['current'];
 $pages = 1;
-$cookie = $_COOKIE['bookmark'];
+$cookie = isset($_COOKIE['bookmark']);
 if (isset($_GET['pages'])) {
   $pages = $_GET['pages'];
 }
@@ -23,10 +23,10 @@ switch ($current) {
     break;
   case 'bookmark':
     $sql = mysqli_query($con, 'SELECT * FROM `movies`');
-    $sql = viewBookmark($sql,$_COOKIE['bookmark']);
+    $sql = viewBookmark($sql,isset($_COOKIE['bookmark'])?$_COOKIE['bookmark']:'');
     break;
 }
-$lenght = mysqli_num_rows($sql);
+$lenght = count(is_array($sql)?$sql:array());
 $result = limitSql($sql, $pages, 18);
 $result = anime($result);
 

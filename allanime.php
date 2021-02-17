@@ -2,7 +2,7 @@
 require 'admin/crud/config.php';
 include 'tamplate/header.php';
 
-$current = $_GET['current'];
+$current = isset($_GET['current']);
 $pages = 1;
 if (isset($_GET['pages'])) {
   $pages = $_GET['pages'];
@@ -12,8 +12,6 @@ $key = "1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
 
 $sql = mysqli_query($con, 'SELECT * FROM `movies` ORDER BY `judul`');
 $result = allanime(explode(',', $key), $sql);
-
-$arr = selectPage($pages, $lenght, 18);
 ?>
 
 <body>
@@ -63,12 +61,12 @@ $arr = selectPage($pages, $lenght, 18);
                   <div class="genre" style="width: 100%;">
                     <?php
                     foreach ($b as $c) {
-                      if (count($c) != 1) {
+                      if (is_array($c)) {
                     ?>
                         <div style="width: 49%; display: inline-block; padding-left: 25px;">
                           <ul>
                             <li style="color: white;">
-                              <a href="anime-details.php?id=<?php echo $c['id']; ?>" class="btn" style="font-size: 15px; color: white; margin-bottom: 5px; text-align: left; width: 100%; padding-top: 0px; vertical-align: top;"><?php echo $c['judul'] ?></a>
+                              <a href="anime-details.php?id=<?php echo $c['id']; ?>" class="btn" style="font-size: 15px; color: white; margin-bottom: 5px; text-align: left; width: 100%; padding-top: 0px; vertical-align: top;"><?php echo $c['judul']; ?></a>
                             </li>
                           </ul>
                         </div>
@@ -85,7 +83,8 @@ $arr = selectPage($pages, $lenght, 18);
           <div class="product__pagination pages">
           </div>
         </div>
-        <?php include "tamplate/sidebar.php" ?>
+        <?php
+        include "tamplate/sidebar.php" ?>
       </div>
     </div>
   </section>

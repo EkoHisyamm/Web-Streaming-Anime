@@ -1,5 +1,4 @@
 <?php
-session_start();
 $con = mysqli_connect("localhost", "root", "", "db_movieku");
 
 // Check connection
@@ -486,7 +485,7 @@ function viewBookmark($dataAnime, $listBookmark)
 
 function recentWatch($newWatch)
 {
-  $listWatch = $_COOKIE['recentWatch'];
+  $listWatch = isset($_COOKIE['recentWatch'])?$_COOKIE['recentWatch']:'';
   $arr       = [];
   $listWatch = explode(',', $listWatch);
   foreach ($listWatch as $value) {
@@ -531,7 +530,7 @@ function getRecentWatch($recentWatch)
 
 function lastWatch($judul, $episode)
 {
-  $last = $_COOKIE['last'][$judul];
+  $last = isset($_COOKIE['last'][$judul])?$_COOKIE['last'][$judul]:'';
   if (empty($last)) {
     setcookie("last[$judul]", "$episode,");
   } else {
@@ -551,7 +550,7 @@ function lastWatch($judul, $episode)
 
 function cekLastWatch($judul, $episode)
 {
-  $last = $_COOKIE['last'][$judul];
+  $last = isset($_COOKIE['last'][$judul])?$_COOKIE['last'][$judul]:'';
   $last = explode(',', $last);
   foreach ($last as $value) {
     if ($value == $episode) {

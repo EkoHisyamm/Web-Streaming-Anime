@@ -24,7 +24,7 @@ $result = getEps($arr['judul']);
         <div class="row">
           <?php
           foreach ($detail as $row) {
-            $bookmark = checkBookmark($_COOKIE['bookmark'],$row['id']);
+            $bookmark = checkBookmark(isset($_COOKIE['bookmark'])?$_COOKIE['bookmark']:'',$row['id']);
           ?>
             <p class="id" style="display: none;"><?php echo $row['id'] ?></p>
             <div class="col-lg-3">
@@ -128,7 +128,6 @@ $result = getEps($arr['judul']);
 <script type="text/javascript">
   $(document).ready(function() {
     var icon = $('#icon_bookmark');
-    // document.cookie = "bookmark=";
     var cookie = getCookie('bookmark');
     var id = $('.id').text();
     if (cookie == id) {
@@ -147,8 +146,6 @@ $result = getEps($arr['judul']);
         },
         dataType: "json",
         success: function(data) { 
-          // console.log(data);
-          // document.cookie = "recent=" + "teststst";
         }
       });
     })

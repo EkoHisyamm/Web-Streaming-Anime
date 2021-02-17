@@ -1,6 +1,5 @@
 <?php
 require 'admin/crud/config.php';
-include 'tamplate/header.php';
 if (isset($_GET['id'])) {
   $id = trim($_GET['id']);
 }
@@ -24,7 +23,7 @@ $comment  = mysqli_query($con, 'SELECT * FROM `comment` WHERE `episode_id` = ' .
 
 lastWatch($id_movie, $detail['id']);
 recentWatch($id_movie);
-// print_r($_COOKIE['lastWatch']);
+include 'tamplate/header.php';
 ?>
 
 <body>
@@ -109,7 +108,7 @@ recentWatch($id_movie);
                   <h5>your comments</h5>
                 </div>
                 <form action="#">
-                  <input id="name" class="form-control" placeholder="Name" value="<?php echo $_COOKIE['name_comment'] ?>" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
+                  <input id="name" class="form-control" placeholder="Name" value="<?php echo isset($_COOKIE['name_comment'])?$_COOKIE['name_comment']:''; ?>" style="margin-bottom: 10px; padding-left: 20px; width: 50%;">
                   <textarea id="msg" style="color: #495057;" placeholder="Comment"></textarea>
                   <button type="button" class="btn_comment float-right"><i class="fa fa-location-arrow"></i> Review</button>
                 </form>
@@ -120,7 +119,7 @@ recentWatch($id_movie);
                 </div>
                 <div id="commentlist">
                   <?php
-                  if (count(mysqli_fetch_assoc($comment)) == 0) {
+                  if (mysqli_num_rows($comment) == 0) {
                   ?>
                     <p style="color: white;" class="first_comment">Jadilah yang pertama berkomentar</p>
                     <?php
@@ -173,10 +172,8 @@ recentWatch($id_movie);
 
 </html>
 
-<script>
+<script type="text/javascript">
   $(document).ready(function() {
-    var comment = JSON.parse('<?php echo json_encode($arr) ?>');
-
     $('.btn_comment').on('click', function(event) {
       var name = $('#name').val();
       var msg = $('#msg').val();
