@@ -83,7 +83,7 @@ $result = getEps($arr['judul']);
                     <?php
                     foreach ($result as $b) {
                     ?>
-                      <a style="margin-right: 5px; margin-bottom: 10px; font-weight: bold;" class="btn_eps btn <?php echo cekLastWatch($id,$b['id']) ?>" href="anime-watching.php?id=<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
+                      <a style="margin-right: 5px; margin-bottom: 10px; font-weight: bold;" class="btn_eps btn <?php echo cekLastWatch($id,$b['id']) ?>" data-movie="<?php echo $b['id']; ?>"><?php echo $b['episode'] ?></a>
                     <?php
                     }
                     ?>
@@ -135,6 +135,7 @@ $result = getEps($arr['judul']);
     }
 
     $(".btn_eps").click(function() {
+      var herf = $(this).attr("data-movie");
       $judul = $(".judul").text();
       $view = $(".views").text();
       $.ajax({
@@ -144,8 +145,9 @@ $result = getEps($arr['judul']);
           view: $view,
           judul: $judul,
         },
-        dataType: "json",
         success: function(data) { 
+          $(this).attr('herf','anime-watching.php?id='+herf);
+          window.location.href = $(this).attr('herf');
         }
       });
     })
