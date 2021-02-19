@@ -24,6 +24,20 @@
     $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
     array_push($th, 'judul', 'episode');
     break;
+
+    case 'kosong':
+      switch ($type) {
+        case 'movie':
+          $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `movies` ORDER BY `id` DESC ');
+          array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
+        break;
+          
+      case 'episode':
+          $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode` FROM `episode` ORDER BY `id` DESC ');
+          array_push($th, 'judul', 'episode');
+        break;
+      }
+    break;
   }
 
   while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
@@ -96,35 +110,12 @@
                         ?>
                         <td>
                           <a href="add<?php echo $current ?>.php?id=<?php echo $row['id'] . '&current=' . $current . '&pages=' . $pages . '&action=edit' ?>" name="edit" title='Update Record' data-toggle='tooltip'><span class='fas fa-edit'></span></a>
-                          <a href="#deletemodal" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' data-toggle='modal' class="delete"> <span class='fas fa-trash-alt'></span></a>
+                          <a href="#" name="delete" data-id="<?php echo $row['id']; ?>" title='Delete Record' class="delete"> <span class='fas fa-trash-alt'></span></a>
                         </td>
                       </tr>
                     <?php
                   }
                 ?>
-
-                <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="delete">Delete Data</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body" style="padding: 0;">
-                        <div class="card-body">
-                          <div class="form-group">
-                            <p for="Confirm">data yang telah dihapus tidak dapat di kembalikan</p>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button id="deleteModal" type="button" class="btn btn-danger">Delete</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </tbody>
             </table>
           </div>
@@ -151,33 +142,59 @@
       $('.pages').append("<li><a href='?current=<?php echo $current ?>&pages=<?php echo limitPage($pages, $lenght, $limit, 'right') ?>'class='page-link'>&raquo;</a></li>");
     }
 
-    var id;
     $(".delete").click(function() {
-      id = $(this).data("id");
+      var id = $(this).data("id");
+      swal({
+        title: "Beneran mau hapus?",
+        text: "Sekali lu hapus, kagak bisa di backup lho!!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Nice, Berhasil Terhapus!", {
+            icon: "success",
+          });
+          $.ajax({
+            method: "POST",
+            url: "crud/delete.php",
+            data : {idDel : id, showdata : val},
+            success: function(data){;
+              $('#deletemodal').modal('hide');
+              $('#listmovies').html(data);
+            }
+          });
+        } else {
+          swal("Pikirkan dengan baik sebelum menghapus!");
+        }
+      });
     });
 
     var val = "<?php echo "$current" ?>";
-    $("#deleteModal").click(function() {
-      $.ajax({
-        method: "POST",
-        url: "crud/delete.php",
-        data : {idDel : id, showdata : val},
-        success: function(data){;
-          $('#deletemodal').modal('hide');
-          $('#listmovies').html(data);
-        }
-      });
-    });
-
     $('#search').on('keyup', function() {
-      $.ajax({
-        method: "POST",
-        url:    "crud/searchmovie.php",
-        data: { search : $(this).val(), different : val },
-        success: function(data){
-          $('#listmovies').html(data);
-        }
-      });
+      let search = $(this).val();
+
+      if(search != ""){
+        $.ajax({
+          method: "POST",
+          url:    "crud/searchmovie.php",
+          data: { search : $(this).val(), different : val, type : val },
+          success: function(data){
+            $('#listmovies').html(data);
+          }
+        });
+      } else {
+        $.ajax({
+          method: "POST",
+          url:    "crud/searchmovie.php",
+          data: { search : $(this).val(), different : val, type : 'kosong' },
+          success: function(data){
+            $('#listmovies').html(data);
+          }
+        });
+      }
+
     });
   });
 </script>

@@ -59,7 +59,7 @@ switch (isset($_GET['action'])) {
                 <div class="card card-default">
                   <div class="card-header">Grabber</div>
                   <div class="card-body">
-                    <label>masukan link dari Myanimelist</label>
+                    <label>masukan link dari <a href="https://myanimelist.net/">Myanimelist</a></label>
                     <div class="input-group">
                       <input name="graber" type="text" class="form-control link" placeholder="https://myanimelist.net/anime/16498/Shingeki_no_Kyojin">
                       <div class="input-group-append">

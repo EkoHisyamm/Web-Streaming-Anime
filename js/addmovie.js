@@ -46,9 +46,14 @@ $(document).ready(function() {
 			};
 		});
 		if (a == 0 && $('.msg').text() == "") {
+			swal("Nice, Berhasil Mengupload!", {
+				icon: "success",
+			});
 			$('.btn-submit').attr('type', 'submit');
 		} else {
-			$('.warning').text('isi semua data dan pastikan data belum ada');
+			swal("isi semua data dan pastikan series tersedia dan belum ada!", {
+				icon: "error",
+			});
 		}
 	})
 
