@@ -50,3 +50,35 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="html/dist/js/pages/dashboard.js"></script>
 
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#logout').click(function() {
+      swal({
+        title: "Beneran mau logout?",
+        text: "Kalo iya, Balik lagi ya!! urus website ini!!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          $.ajax({
+            method: "POST",
+            data : {logout : 'logout'},
+            success: function(data){;
+              swal("Nice, Berhasil Terhapus!", {
+                icon: "success",
+              });
+              setTimeout(function () {
+                location.href = "http://localhost/PKL/Native/PKLWEB/admin/index.php";
+              }, 800);
+            }
+          });
+        } else {
+          swal("Pikirkan dengan baik sebelum menghapus!");
+        }
+      });
+    });
+  });
+</script>
+

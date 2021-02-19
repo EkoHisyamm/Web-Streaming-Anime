@@ -24,6 +24,20 @@
     $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC');
     array_push($th, 'judul', 'episode');
     break;
+
+    case 'kosong':
+      switch ($type) {
+        case 'movie':
+          $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `movies` ORDER BY `id` DESC ');
+          array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
+        break;
+          
+      case 'episode':
+          $sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode` FROM `episode` ORDER BY `id` DESC ');
+          array_push($th, 'judul', 'episode');
+        break;
+      }
+    break;
   }
 
   while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
@@ -159,14 +173,28 @@
 
     var val = "<?php echo "$current" ?>";
     $('#search').on('keyup', function() {
-      $.ajax({
-        method: "POST",
-        url:    "crud/searchmovie.php",
-        data: { search : $(this).val(), different : val },
-        success: function(data){
-          $('#listmovies').html(data);
-        }
-      });
+      let search = $(this).val();
+
+      if(search != ""){
+        $.ajax({
+          method: "POST",
+          url:    "crud/searchmovie.php",
+          data: { search : $(this).val(), different : val, type : val },
+          success: function(data){
+            $('#listmovies').html(data);
+          }
+        });
+      } else {
+        $.ajax({
+          method: "POST",
+          url:    "crud/searchmovie.php",
+          data: { search : $(this).val(), different : val, type : 'kosong' },
+          success: function(data){
+            $('#listmovies').html(data);
+          }
+        });
+      }
+
     });
   });
 </script>

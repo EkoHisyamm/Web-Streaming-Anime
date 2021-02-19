@@ -1,25 +1,39 @@
 <?php
 	if (isset($_POST['search'])) {
 		require_once 'config.php';
-		$th = [];
-		$limit = 10;
+		$th      = [];
+		$limit   = 10;
 		$current = $_POST['different'];
+		$type    = $_POST['type'];
 
 		switch ($current) {
 			case 'movie':
-				$sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`, `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
-				array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
-				break;
+				switch ($type) {
+					case 'kosong':
+						$sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`, `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` ORDER BY `id` DESC ');
+						array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
+					break;
+					
+					case 'movie':
+						$sql = mysqli_query($con, 'SELECT `durasi`,`episode`,`gambar`,`genre`,`id`,`judul`,`rate`, `rilis`, `sinopsis`, `status`, `studio`,`type`,`views`,`time` FROM `movies` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
+						array_push($th, 'judul', '', 'durasi', 'rate','rilis','type','studio','status');
+					break;
+				}
+			break;
 			
 			case 'episode':
-				$sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
-				array_push($th, 'judul', 'episode');
-				break;
-
-			case 'genre':
-				$sql = mysqli_query($con, 'SELECT `nama`,`info` FROM `genre` WHERE `nama` LIKE "%' . $_POST['search'] . '%"');
-				array_push($th, 'nama', 'info');
-				break;
+				switch ($type) {
+					case 'kosong':
+						$sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` ORDER BY `id` DESC ');
+						array_push($th, 'judul', 'episode');
+						break;
+					
+					case 'episode':
+						$sql = mysqli_query($con, 'SELECT `judul`,`id`,`episode`,`link` FROM `episode` WHERE `judul` LIKE "%' . $_POST['search'] . '%"');
+						array_push($th, 'judul', 'episode');
+						break;
+				}
+			break;
 		}
 
 		while ($a = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
