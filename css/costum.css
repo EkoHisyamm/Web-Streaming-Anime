@@ -1,3 +1,7 @@
+#logout {
+    cursor: pointer;
+}
+
 .product__item__text h5 a {
     overflow: hidden;
     display: -webkit-box;

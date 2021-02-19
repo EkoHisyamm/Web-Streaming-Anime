@@ -63,7 +63,7 @@ switch (isset($_GET['action'])) {
                 <div class="card card-default">
                   <div class="card-header">Grabber</div>
                   <div class="card-body">
-                    <label>masukan link dari Anime-indo.cc</label>
+                    <label>masukan link dari <a href="https://anime-indo.cc/">Anime-indo.cc</a></label>
                     <div class="input-group">
                       <input name="graber" type="text" class="form-control link" placeholder="https://anime-indo.cc/non-non-biyori-nonstop-episode-04/">
                       <div class="input-group-append">

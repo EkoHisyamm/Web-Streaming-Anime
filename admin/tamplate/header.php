@@ -14,7 +14,8 @@ if (!isset($_SESSION['LOGIN']) || $_SESSION['LOGIN'] !== true) {
   <title>Admin</title>
   <link rel="stylesheet" href="html/costum.css" type="text/css" media="screen">   
   <link rel="stylesheet" href="html/coscs.css" type="text/css" media="screen">         
-
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
