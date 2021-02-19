@@ -71,7 +71,11 @@ li a:active {
 }
 
 .navbar__search {
-    width: 15%;
+    width: 19%;
+}
+
+.navbar__menu {
+    max-width: 52%;
 }
 
 @media only screen and (max-width: 600px) {
@@ -105,6 +109,10 @@ li a:active {
     }
     .navbar__search {
         width: 95%;
+    }
+
+    .navbar__menu {
+        max-width: 100%;
     }
 
     .navbar__search div {
